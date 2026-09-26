@@ -84,7 +84,7 @@ public final class ClientSetup {
                 return WeaponItemRenderer.get();
             }
         };
-        Item[] items = ModItems.ORDERED.stream().map(DeferredItem::get).toArray(Item[]::new);
+        Item[] items = ModItems.ORDERED.stream().map(d -> (Item) d.get()).toArray(Item[]::new);
         e.registerItem(ext, items);
     }
 
