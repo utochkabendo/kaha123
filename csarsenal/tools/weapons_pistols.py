@@ -397,3 +397,19 @@ def defuser():
 
 PISTOLS = [glock18, usp_s, p2000, p250, fiveseven, cz75, tec9, beretta, deagle, revolver, zeus]
 EQUIPMENT = [knife, karambit, he, flashbang, smoke, incendiary, decoy, molotov, c4, kevlar, helmet, defuser]
+
+
+# ======================================================================== shell casings (axis = x)
+def shell(name, L, r, neck=0.0, mat='brass', base_mat=None):
+    W = Model(name)
+    prof = [(0, r * 0.9), (0.6, r), (L * (0.7 if neck else 1.0), r)]
+    if neck:
+        prof += [(L * 0.78, r * neck), (L, r * neck)]
+    W.add('body', lathe(prof, mat, segs=10, axis='x'))
+    if base_mat:
+        W.add('body', lathe([(-0.2, r * 1.02), (L * 0.25, r * 1.02)], base_mat, segs=10, axis='x'))
+    return W
+
+
+SHELLS = [lambda: shell('shell_rifle', 39, 5.6, neck=0.72), lambda: shell('shell_pistol', 19, 4.8),
+          lambda: shell('shell_shotgun', 70, 10.5, mat='grenade_red', base_mat='brass')]
