@@ -97,35 +97,41 @@ def finish(x, peak=0.84, fade=0.05, drive=0.0):
 # ------------------------------------------------------------------------------ gunshots
 
 def gunshot(p, rng, far=False):
+    """Layered gunshot: edge crack, mid band muzzle blast, low boom, pitched thump, action clicks, saturation,
+    then a dark diffuse tail with outdoor slapback echoes. Balanced like a real report (energy centred around
+    2-2.5 kHz with a strong low end) rather than a bright noise burst."""
     dur = p.get('dur', 1.1) * (1.6 if far else 1.0)
     n = int(dur * SR)
     x = np.zeros(n)
-    # 1) supersonic crack / muzzle report transient
-    crack = hp(noise(n, rng), 900) * env_exp(n, 0.00015, p['crack_tau'])
-    x += crack * p['crack']
-    # 2) blast body - band limited noise
-    body = bp(noise(n, rng), p['body_lo'], p['body_hi'])
-    body *= env_exp(n, 0.0006, p['body_tau'])
-    x += body * p['body'] * 3.0
-    # low end "chest" noise
-    low = lp(noise(n, rng), p.get('low_fc', 250)) * env_exp(n, 0.001, p['body_tau'] * 1.8)
-    x += low * p.get('low', 0.8) * 4.0
-    # 3) thump - pitched sine sweep
+    # 1) crack: short broadband transient that gives the shot its edge (kept moderate - no hiss)
+    x += hp(noise(n, rng), 1500) * env_exp(n, 0.0001, p['crack_tau'] * 0.6) * p['crack'] * 0.55
+    # 2) muzzle blast body (the "bang"), mid band noise
+    x += bp(noise(n, rng), p['body_lo'], min(p['body_hi'], 2600)) * env_exp(n, 0.0004, p['body_tau']) * p['body'] * 3.0
+    # 3) low boom: the chest punch
+    x += lp(noise(n, rng), p.get('low_fc', 250), order=3) * env_exp(n, 0.0015, p['body_tau'] * 2.4) * p.get('low', 0.8) * 9.0
+    # 4) pitched thump
     t = np.arange(n) / SR
     f0, f1 = p['thump_f']
     fr = f1 + (f0 - f1) * np.exp(-t / 0.03)
-    ph = 2 * np.pi * np.cumsum(fr) / SR
-    x += np.sin(ph) * env_exp(n, 0.001, p['thump_tau']) * p['thump']
-    # 4) mechanics (bolt / slide)
+    x += np.sin(2 * np.pi * np.cumsum(fr) / SR) * env_exp(n, 0.001, p['thump_tau']) * p['thump'] * 1.7
+    # 5) mechanics (bolt / slide)
     for (d, a) in p.get('mech', []):
-        x += click(n, rng, d, freqs=p.get('mech_freqs', (1800, 3300, 5200)), decay=0.02, amp=a * 0.35, noise_amp=0.8)
+        x += click(n, rng, d, freqs=p.get('mech_freqs', (1800, 3300, 5200)), decay=0.02, amp=a * 0.3, noise_amp=0.7)
     # saturate the dry report (punch) before the tail is added
-    dry = np.tanh(x / (np.max(np.abs(x)) + 1e-9) * (1 + p.get('drive', 1.2))) / np.tanh(1 + p.get('drive', 1.2))
-    # 5) room / outdoor tail: darker and much quieter than the report
-    ir = reverb_ir(min(dur, p['rev_tau'] * 6 + 0.1), p['rev_tau'] * (1.5 if far else 1.0), rng, bright=p.get('rev_bright', 2200))
-    wet = lp(conv(dry, ir), 3000 if not far else 1500)
-    wet_amt = p['wet'] * 0.30 * (2.5 if far else 1.0)
-    y = dry * (0.25 if far else 1.0) + wet * wet_amt
+    drive = p.get('drive', 1.2)
+    dry = np.tanh(x / (np.max(np.abs(x)) + 1e-9) * (1 + drive)) / np.tanh(1 + drive)
+    dry = lp(dry, 9000)
+    # 6) tail: diffuse reverb plus outdoor slapback echoes (the rolling boom after a shot)
+    ir = reverb_ir(min(dur, p['rev_tau'] * 6 + 0.1), p['rev_tau'] * (1.5 if far else 1.0), rng, bright=p.get('rev_bright', 1800))
+    wet = lp(conv(dry, ir), 2500 if not far else 1300)
+    slap = np.zeros(n)
+    for d, a in ((0.085, 0.3), (0.15, 0.2), (0.24, 0.13), (0.37, 0.08)):
+        k = int(d * SR * rng.uniform(0.92, 1.08))
+        if k < n:
+            slap[k:] += dry[:n - k] * a
+    slap = lp(slap, 1100, order=2)
+    wet_amt = p['wet'] * 0.32 * (2.5 if far else 1.0)
+    y = dry * (0.25 if far else 1.0) + wet * wet_amt + slap * (0.8 if not far else 1.4)
     if far:
         y = lp(y, 1400, order=3)
         # distant: the attack arrives smeared
@@ -134,15 +140,19 @@ def gunshot(p, rng, far=False):
 
 
 def suppressed_shot(p, rng):
+    """Suppressed report: a thuddy mid band "pfft", a low thump, the action clack and a short, dark room tail."""
     n = int(0.6 * SR)
     x = np.zeros(n)
-    x += bp(noise(n, rng), p.get('sil_lo', 600), p.get('sil_hi', 3200)) * env_exp(n, 0.0005, p.get('sil_tau', 0.018)) * 2.4
-    x += hp(noise(n, rng), 3000) * env_exp(n, 0.0001, 0.0015) * 0.6
+    lo, hi = p.get('sil_lo', 600), p.get('sil_hi', 3200)
+    x += bp(noise(n, rng), lo * 0.6, hi * 0.65) * env_exp(n, 0.0005, p.get('sil_tau', 0.018)) * 2.6
+    x += hp(noise(n, rng), 2500) * env_exp(n, 0.0001, 0.0012) * 0.25
+    x += lp(noise(n, rng), 220, order=3) * env_exp(n, 0.001, 0.035) * 4.0
     t = np.arange(n) / SR
-    x += np.sin(2 * np.pi * (160 + 200 * np.exp(-t / 0.01)) * t) * env_exp(n, 0.0008, 0.03) * 0.5
+    x += np.sin(2 * np.pi * np.cumsum(120 + 160 * np.exp(-t / 0.012)) / SR) * env_exp(n, 0.0008, 0.04) * 0.9
     for (d, a) in p.get('mech', [(0.012, 1.0), (0.055, 0.8)]):
-        x += click(n, rng, d, freqs=(1600, 2900, 4700), decay=0.018, amp=a * 0.55)
-    ir = reverb_ir(0.4, 0.07, rng, bright=3000)
+        x += click(n, rng, d, freqs=(1500, 2700, 4300), decay=0.018, amp=a * 0.5)
+    x = lp(x, 7000)
+    ir = reverb_ir(0.4, 0.07, rng, bright=2200)
     y = x + conv(x, ir) * 0.25
     return finish(y, drive=0.6)
 
@@ -440,11 +450,8 @@ def atten_for(event):
     return best[1] if best else 16
 
 
-def build_all(root):
-    rng = np.random.default_rng(2024)
+def build_guns(root, rng, events):
     snd = os.path.join(root, 'assets/csarsenal/sounds')
-    events = {}
-    # guns
     for gid, (cls, ov) in GUNS.items():
         if cls is None:
             continue
@@ -469,6 +476,13 @@ def build_all(root):
                 write_ogg(f'{snd}/weapon/{gid}/sil{v}.ogg', suppressed_shot(sp, rng))
                 files.append(f'weapon/{gid}/sil{v}')
             events[f'weapon.{gid}.fire_sil'] = files
+
+
+def build_all(root):
+    rng = np.random.default_rng(2024)
+    snd = os.path.join(root, 'assets/csarsenal/sounds')
+    events = {}
+    build_guns(root, rng, events)
     misc = gen_misc(rng)
     for key, clips in misc.items():
         files = []
@@ -498,6 +512,11 @@ def build_all(root):
 
 
 if __name__ == '__main__':
+    # python3 tools/sounds.py <resources root> [guns]   ("guns" only rewrites the gunshot files)
     import sys
-    ev = build_all(sys.argv[1])
-    print(len(ev), 'events')
+    if 'guns' in sys.argv[2:]:
+        build_guns(sys.argv[1], np.random.default_rng(2024), {})
+        print('gunshots rebuilt')
+    else:
+        ev = build_all(sys.argv[1])
+        print(len(ev), 'events')

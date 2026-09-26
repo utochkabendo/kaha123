@@ -103,6 +103,23 @@ public final class ServerEvents {
         }
     }
 
+    /**
+     * CS footsteps for everybody else: walking (shift) and crouching players are silent, running players are loud
+     * enough to be heard like in CS (the moving player hears his own steps client side).
+     */
+    @SubscribeEvent
+    public static void onSound(net.neoforged.neoforge.event.PlayLevelSoundEvent.AtPosition e) {
+        if (e.getLevel().isClientSide() || e.getSound() == null) return;
+        if (!e.getSound().value().getLocation().getPath().endsWith(".step")) return;
+        var pos = e.getPosition();
+        for (var pl : e.getLevel().players()) {
+            if (!(pl instanceof ServerPlayer sp) || sp.distanceToSqr(pos) > 1.0 || !CsMode.active(sp)) continue;
+            if (PlayerState.of(sp).walking || sp.isCrouching()) e.setCanceled(true);
+            else e.setNewVolume(Math.max(e.getNewVolume(), 1.1f));
+            return;
+        }
+    }
+
     @SubscribeEvent
     public static void onServerTick(net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) {
         CsStats.tick(e.getServer());
