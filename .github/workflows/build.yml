@@ -1,0 +1,51 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: windows-x64
+          - os: ubuntu-latest
+            name: linux-x64
+          - os: macos-latest
+            name: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev libasound2-dev
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist/ZARYA
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            cp build/Release/zarya.exe dist/ZARYA/
+          else
+            cp build/zarya dist/ZARYA/
+          fi
+          cp -r assets shaders dist/ZARYA/
+          cp README.md dist/ZARYA/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ZARYA-${{ matrix.name }}
+          path: dist/ZARYA
