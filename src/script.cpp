@@ -197,7 +197,7 @@ void BuildStory(Director& D) {
     // ------------------------------------------------------------------ COLD OPEN (flash-forward)
     {
         auto b = D.Add("cold");
-        b.Amb(0.0f, "amb_breath_fast", 0.55f, 0.3f).Amb(0.0f, "amb_alarm", 0.45f, 0.3f).Sfx(0.2f, "heartbeat", 0.9f);
+        b.Amb(0.0f, "amb_breath_fast", 0.55f, 0.3f).Amb(0.0f, "amb_alarm", 0.35f, 0.3f).Sfx(0.2f, "heartbeat", 0.9f);
         b.Shot(1.2f, [](SceneState& s, float t, const Flags&) { s.set = SET_BLACK; });
         b.Sfx(1.2f, "glitch", 0.8f).Sfx(1.25f, "impact_big", 0.7f);
         b.Shot(0.9f, [](SceneState& s, float t, const Flags&) {
@@ -546,7 +546,7 @@ void BuildStory(Director& D) {
             DebrisStream(s, t, 0.7f, V3(0, 6, z), 12, 61, V3(0.35f, -0.12f, -0.75f), 110);
         });
         b.Sfx(6.7f, "impact_big", 1.0f).Call(6.7f, [](Director& d) { d.Shake(1.6f); d.Flash(0.35f, V3(1, 0.8f, 0.6f)); });
-        b.Amb(6.7f, "amb_breath_fast", 0.8f, 0.2f);
+        b.Amb(6.7f, "amb_breath_fast", 0.6f, 0.2f);
         QteDef q;
         q.type = QteType::Press;
         q.key = KEY_SPACE;
@@ -788,7 +788,7 @@ void BuildStory(Director& D) {
         // the inner airlock hatch: pressure equalises, the station's red chaos is revealed
         auto b = D.Add("airlock");
         b.Music(0.0f, "mus_tension", 1.0f, 0.85f);
-        b.Amb(0.0f, "amb_alarm", 0.3f, 0.5f).Amb(0.0f, "amb_master_alarm", 0.12f, 0.5f).Amb(0.0f, "amb_station", 0.35f, 0.5f);
+        b.Amb(0.0f, "amb_alarm", 0.2f, 0.5f).Amb(0.0f, "amb_master_alarm", 0.12f, 0.5f).Amb(0.0f, "amb_station", 0.35f, 0.5f);
         b.Amb(0.0f, "amb_suit", 0.0f, 1.0f).Amb(0.0f, "amb_hiss", 0.45f, 0.5f);
         b.Chapter(0.6f, "ЧАСТЬ III|ЛЮК");
         b.Line(0.3f, "a01");
@@ -1058,7 +1058,7 @@ void BuildStory(Director& D) {
     {
         auto b = D.Add("decay");
         b.Music(0.0f, "mus_climax", 1.2f, 0.9f).Sfx(0.2f, "braam", 0.9f);
-        b.Amb(0.0f, "amb_thruster", 0.45f, 1.0f).Amb(0.0f, "amb_alarm", 0.25f, 1.0f).Amb(0.0f, "amb_master_alarm", 0.1f, 1.0f);
+        b.Amb(0.0f, "amb_thruster", 0.25f, 1.0f).Amb(0.0f, "amb_alarm", 0.16f, 1.0f).Amb(0.0f, "amb_master_alarm", 0.1f, 1.0f);
         b.Chapter(0.8f, "ЧАСТЬ IV|ПАДЕНИЕ");
         // d1: the stuck engine fires — the station is braking
         b.Shot(7.6f, [](SceneState& s, float t, const Flags& f) {
@@ -1209,7 +1209,7 @@ void BuildStory(Director& D) {
         });
         b.Line(4.9f, "e02");
         b.Amb(11.0f, "amb_thruster", 0.0f, 2.0f).Amb(11.0f, "amb_alarm", 0.0f, 1.0f).Amb(11.0f, "amb_master_alarm", 0.0f, 1.0f);
-        b.Amb(11.6f, "amb_reentry", 0.8f, 1.2f);
+        b.Amb(11.6f, "amb_reentry", 0.42f, 1.2f);
         // re-entry plasma
         b.Shot(8.0f, [](SceneState& s, float t, const Flags& f) {
             Space(s, kER + 0.5f);
@@ -1294,7 +1294,7 @@ void BuildStory(Director& D) {
     }
     {
         auto b = D.Add("valve");
-        b.Amb(0.0f, "amb_thruster", 0.85f, 1.0f).Amb(0.0f, "amb_suit", 0.3f, 1.0f).Amb(0.0f, "amb_breath_fast", 0.5f, 1.0f);
+        b.Amb(0.0f, "amb_thruster", 0.38f, 1.0f).Amb(0.0f, "amb_suit", 0.3f, 1.0f).Amb(0.0f, "amb_breath_fast", 0.5f, 1.0f);
         b.Amb(0.0f, "amb_station", 0.0f, 1.0f).Amb(0.0f, "amb_alarm", 0.0f, 1.0f);
         b.Call(0.0f, [](Director& d) { d.flags.valveScore = 0; });
         // climbing along the service module into the heat
@@ -1470,7 +1470,7 @@ void BuildStory(Director& D) {
             d.flags.ending = "ПОСЛЕДНИЙ СИГНАЛ";
             d.flags.endingIndex = 3;
         });
-        b.Music(0.0f, "mus_tragic", 2.0f, 0.95f).Amb(0.0f, "amb_reentry", 0.4f, 3.0f);
+        b.Music(0.0f, "mus_tragic", 2.0f, 0.95f).Amb(0.0f, "amb_reentry", 0.25f, 3.0f);
         b.Shot(6.8f, [](SceneState& s, float t, const Flags& f) {
             Space(s, kER + 0.4f);
             s.sunDir = SunDir(-11.0f, 5);
