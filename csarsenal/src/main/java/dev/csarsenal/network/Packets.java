@@ -11,7 +11,7 @@ import java.util.List;
 
 /** All custom payloads. */
 public final class Packets {
-    private static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> type(String n) {
+    private static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> ptype(String n) {
         return new CustomPacketPayload.Type<>(CsArsenal.id(n));
     }
 
@@ -49,7 +49,7 @@ public final class Packets {
      * (view angles + recoil + spread) as the shooter saw them.
      */
     public record Shoot(int slot, int weapon, int shotIndex, long seed, Vec3 origin, List<Pellet> pellets, boolean scoped) implements CustomPacketPayload {
-        public static final Type<Shoot> TYPE = type("shoot");
+        public static final Type<Shoot> TYPE = ptype("shoot");
         public static final StreamCodec<FriendlyByteBuf, Shoot> CODEC = StreamCodec.ofMember(Shoot::write, Shoot::new);
 
         Shoot(FriendlyByteBuf b) {
@@ -95,7 +95,7 @@ public final class Packets {
     }
 
     public record Reload(int slot) implements CustomPacketPayload {
-        public static final Type<Reload> TYPE = type("reload");
+        public static final Type<Reload> TYPE = ptype("reload");
         public static final StreamCodec<FriendlyByteBuf, Reload> CODEC = StreamCodec.ofMember((p, b) -> b.writeVarInt(p.slot), b -> new Reload(b.readVarInt()));
 
         @Override
@@ -107,7 +107,7 @@ public final class Packets {
     /** misc weapon actions */
     public record Action(int action, int slot, int arg) implements CustomPacketPayload {
         public static final int SILENCER = 0, MODE = 1, INSPECT = 2, DRAW = 3, SCOPE = 4, WALK = 5, DROP = 6;
-        public static final Type<Action> TYPE = type("action");
+        public static final Type<Action> TYPE = ptype("action");
         public static final StreamCodec<FriendlyByteBuf, Action> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeVarInt(p.action); b.writeVarInt(p.slot); b.writeVarInt(p.arg); },
                 b -> new Action(b.readVarInt(), b.readVarInt(), b.readVarInt()));
@@ -119,7 +119,7 @@ public final class Packets {
     }
 
     public record Throw(int slot, float strength, Vec3 origin, Vec3 dir, Vec3 playerVel) implements CustomPacketPayload {
-        public static final Type<Throw> TYPE = type("throw");
+        public static final Type<Throw> TYPE = ptype("throw");
         public static final StreamCodec<FriendlyByteBuf, Throw> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeVarInt(p.slot); b.writeFloat(p.strength); writeVec(b, p.origin); writeDir(b, p.dir); writeDir(b, p.playerVel); },
                 b -> new Throw(b.readVarInt(), b.readFloat(), readVec(b), readDir(b), readDir(b)));
@@ -132,7 +132,7 @@ public final class Packets {
 
     /** knife swing; entity = -1 on a miss */
     public record Knife(int slot, boolean heavy, int entity, int group, boolean backstab, Vec3 origin, Vec3 dir, boolean hitWall) implements CustomPacketPayload {
-        public static final Type<Knife> TYPE = type("knife");
+        public static final Type<Knife> TYPE = ptype("knife");
         public static final StreamCodec<FriendlyByteBuf, Knife> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeVarInt(p.slot); b.writeBoolean(p.heavy); b.writeVarInt(p.entity); b.writeByte(p.group); b.writeBoolean(p.backstab); writeVec(b, p.origin); writeDir(b, p.dir); b.writeBoolean(p.hitWall); },
                 b -> new Knife(b.readVarInt(), b.readBoolean(), b.readVarInt(), b.readByte(), b.readBoolean(), readVec(b), readDir(b), b.readBoolean()));
@@ -144,7 +144,7 @@ public final class Packets {
     }
 
     public record Buy(String id) implements CustomPacketPayload {
-        public static final Type<Buy> TYPE = type("buy");
+        public static final Type<Buy> TYPE = ptype("buy");
         public static final StreamCodec<FriendlyByteBuf, Buy> CODEC = StreamCodec.ofMember((p, b) -> b.writeUtf(p.id, 64), b -> new Buy(b.readUtf(64)));
 
         @Override
@@ -157,7 +157,7 @@ public final class Packets {
 
     /** a shot fired by somebody else: play the sound, muzzle flash, tracer and impacts */
     public record ShotFx(int shooter, int weapon, Vec3 origin, List<Vec3> dirs, boolean silenced, int shotIndex) implements CustomPacketPayload {
-        public static final Type<ShotFx> TYPE = type("shot_fx");
+        public static final Type<ShotFx> TYPE = ptype("shot_fx");
         public static final StreamCodec<FriendlyByteBuf, ShotFx> CODEC = StreamCodec.ofMember(ShotFx::write, ShotFx::new);
 
         ShotFx(FriendlyByteBuf b) {
@@ -189,7 +189,7 @@ public final class Packets {
 
     /** you got hit: tagging slowdown + aim punch */
     public record Tagged(float tagging, float damage, float yawFrom, boolean headshot) implements CustomPacketPayload {
-        public static final Type<Tagged> TYPE = type("tagged");
+        public static final Type<Tagged> TYPE = ptype("tagged");
         public static final StreamCodec<FriendlyByteBuf, Tagged> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeFloat(p.tagging); b.writeFloat(p.damage); b.writeFloat(p.yawFrom); b.writeBoolean(p.headshot); },
                 b -> new Tagged(b.readFloat(), b.readFloat(), b.readFloat(), b.readBoolean()));
@@ -202,7 +202,7 @@ public final class Packets {
 
     /** you hit somebody (hit confirmation for the shooter) */
     public record HitConfirm(int victim, float damage, int group, boolean kill) implements CustomPacketPayload {
-        public static final Type<HitConfirm> TYPE = type("hit_confirm");
+        public static final Type<HitConfirm> TYPE = ptype("hit_confirm");
         public static final StreamCodec<FriendlyByteBuf, HitConfirm> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeVarInt(p.victim); b.writeFloat(p.damage); b.writeByte(p.group); b.writeBoolean(p.kill); },
                 b -> new HitConfirm(b.readVarInt(), b.readFloat(), b.readByte(), b.readBoolean()));
@@ -215,7 +215,7 @@ public final class Packets {
 
     public record KillFeed(String killer, int killerTeam, String victim, int victimTeam, int weapon, int flags) implements CustomPacketPayload {
         public static final int HEADSHOT = 1, WALLBANG = 2, NOSCOPE = 4, SMOKE = 8, BLIND = 16, AIR = 32;
-        public static final Type<KillFeed> TYPE = type("kill_feed");
+        public static final Type<KillFeed> TYPE = ptype("kill_feed");
         public static final StreamCodec<FriendlyByteBuf, KillFeed> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeUtf(p.killer, 64); b.writeByte(p.killerTeam); b.writeUtf(p.victim, 64); b.writeByte(p.victimTeam); b.writeVarInt(p.weapon); b.writeByte(p.flags); },
                 b -> new KillFeed(b.readUtf(64), b.readByte(), b.readUtf(64), b.readByte(), b.readVarInt(), b.readByte()));
@@ -227,7 +227,7 @@ public final class Packets {
     }
 
     public record Flash(float strength, float duration, Vec3 pos) implements CustomPacketPayload {
-        public static final Type<Flash> TYPE = type("flash");
+        public static final Type<Flash> TYPE = ptype("flash");
         public static final StreamCodec<FriendlyByteBuf, Flash> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeFloat(p.strength); b.writeFloat(p.duration); writeVec(b, p.pos); },
                 b -> new Flash(b.readFloat(), b.readFloat(), readVec(b)));
@@ -241,7 +241,7 @@ public final class Packets {
     /** third person animation events of other players */
     public record Anim(int entity, int anim, int weapon, int arg) implements CustomPacketPayload {
         public static final int RELOAD = 0, DRAW = 1, INSPECT = 2, THROW = 3, KNIFE = 4, KNIFE_HEAVY = 5, SILENCER = 6, RELOAD_CANCEL = 7, SHELL = 8;
-        public static final Type<Anim> TYPE = type("anim");
+        public static final Type<Anim> TYPE = ptype("anim");
         public static final StreamCodec<FriendlyByteBuf, Anim> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeVarInt(p.entity); b.writeByte(p.anim); b.writeVarInt(p.weapon); b.writeVarInt(p.arg); },
                 b -> new Anim(b.readVarInt(), b.readByte(), b.readVarInt(), b.readVarInt()));
@@ -255,7 +255,7 @@ public final class Packets {
     /** world effects: explosions etc. */
     public record Effect(int kind, Vec3 pos, float arg) implements CustomPacketPayload {
         public static final int HE = 0, FLASH = 1, MOLOTOV = 2, EXTINGUISH = 3, C4 = 4, TASER = 5, SMOKE_POP = 6, DECOY_SHOT = 7;
-        public static final Type<Effect> TYPE = type("effect");
+        public static final Type<Effect> TYPE = ptype("effect");
         public static final StreamCodec<FriendlyByteBuf, Effect> CODEC = StreamCodec.ofMember(
                 (p, b) -> { b.writeByte(p.kind); writeVec(b, p.pos); b.writeFloat(p.arg); },
                 b -> new Effect(b.readByte(), readVec(b), b.readFloat()));

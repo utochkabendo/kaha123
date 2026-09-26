@@ -226,7 +226,7 @@ public final class CsParticles {
         @Override
         public Particle createParticle(SimpleParticleType t, ClientLevel l, double x, double y, double z, double vx, double vy, double vz) {
             Smoke p = new Smoke(l, x, y, z, null, 60 + (int) (Math.random() * 40), 0.5f + (float) Math.random() * 0.4f);
-            p.xd = vx; p.yd = vy; p.zd = vz;
+            p.push(vx, vy, vz, 1);
             p.targetAlpha = 0.45f;
             return p;
         }

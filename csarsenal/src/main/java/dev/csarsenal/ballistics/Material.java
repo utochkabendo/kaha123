@@ -32,7 +32,7 @@ public enum Material {
         if (state.is(BlockTags.LEAVES) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL_CARPETS)) return SOFT;
         if (state.is(BlockTags.LOGS) || state.is(BlockTags.PLANKS) || state.is(BlockTags.WOODEN_DOORS) || state.is(BlockTags.WOODEN_SLABS)
                 || state.is(BlockTags.WOODEN_STAIRS) || state.is(BlockTags.WOODEN_FENCES) || state.is(BlockTags.WOODEN_TRAPDOORS)) return WOOD;
-        SoundType st = state.getSoundType(level, pos, null);
+        SoundType st = level instanceof net.minecraft.world.level.LevelReader lr ? state.getSoundType(lr, pos, null) : state.getSoundType();
         if (st == SoundType.WOOD || st == SoundType.BAMBOO_WOOD || st == SoundType.CHERRY_WOOD || st == SoundType.NETHER_WOOD
                 || st == SoundType.BAMBOO || st == SoundType.SCAFFOLDING || st == SoundType.LADDER) return WOOD;
         if (st == SoundType.METAL || st == SoundType.ANVIL || st == SoundType.CHAIN || st == SoundType.COPPER || st == SoundType.NETHERITE_BLOCK
