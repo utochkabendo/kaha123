@@ -1,0 +1,1435 @@
+{
+ "bullet.shell": {
+  "sounds": [
+   {
+    "attenuation_distance": 10,
+    "name": "csarsenal:bullet/shell0"
+   },
+   {
+    "attenuation_distance": 10,
+    "name": "csarsenal:bullet/shell1"
+   },
+   {
+    "attenuation_distance": 10,
+    "name": "csarsenal:bullet/shell2"
+   }
+  ]
+ },
+ "bullet.shell_shotgun": {
+  "sounds": [
+   {
+    "attenuation_distance": 10,
+    "name": "csarsenal:bullet/shell_shotgun0"
+   },
+   {
+    "attenuation_distance": 10,
+    "name": "csarsenal:bullet/shell_shotgun1"
+   }
+  ]
+ },
+ "bullet.whiz": {
+  "sounds": [
+   {
+    "attenuation_distance": 12,
+    "name": "csarsenal:bullet/whiz0"
+   },
+   {
+    "attenuation_distance": 12,
+    "name": "csarsenal:bullet/whiz1"
+   },
+   {
+    "attenuation_distance": 12,
+    "name": "csarsenal:bullet/whiz2"
+   }
+  ]
+ },
+ "c4.armed": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:c4/armed0"
+   }
+  ]
+ },
+ "c4.beep": {
+  "sounds": [
+   {
+    "attenuation_distance": 48,
+    "name": "csarsenal:c4/beep0"
+   }
+  ]
+ },
+ "c4.defuse": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:c4/defuse0"
+   }
+  ]
+ },
+ "c4.defused": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:c4/defused0"
+   }
+  ]
+ },
+ "c4.explode": {
+  "sounds": [
+   {
+    "attenuation_distance": 300,
+    "name": "csarsenal:c4/explode0"
+   }
+  ]
+ },
+ "c4.plant": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:c4/plant0"
+   }
+  ]
+ },
+ "c4.press": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:c4/press0"
+   }
+  ]
+ },
+ "grenade.bounce": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/bounce0"
+   },
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/bounce1"
+   },
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/bounce2"
+   }
+  ]
+ },
+ "grenade.flash_explode": {
+  "sounds": [
+   {
+    "attenuation_distance": 120,
+    "name": "csarsenal:grenade/flash_explode0"
+   }
+  ]
+ },
+ "grenade.flash_ring": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/flash_ring0"
+   }
+  ]
+ },
+ "grenade.he_explode": {
+  "sounds": [
+   {
+    "attenuation_distance": 160,
+    "name": "csarsenal:grenade/he_explode0"
+   },
+   {
+    "attenuation_distance": 160,
+    "name": "csarsenal:grenade/he_explode1"
+   }
+  ]
+ },
+ "grenade.inferno_extinguish": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/inferno_extinguish0"
+   }
+  ]
+ },
+ "grenade.inferno_loop": {
+  "sounds": [
+   {
+    "attenuation_distance": 32,
+    "name": "csarsenal:grenade/inferno_loop0",
+    "stream": false
+   }
+  ]
+ },
+ "grenade.inferno_start": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/inferno_start0"
+   }
+  ]
+ },
+ "grenade.molotov_shatter": {
+  "sounds": [
+   {
+    "attenuation_distance": 64,
+    "name": "csarsenal:grenade/molotov_shatter0"
+   }
+  ]
+ },
+ "grenade.pin": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/pin0"
+   }
+  ]
+ },
+ "grenade.smoke_emit": {
+  "sounds": [
+   {
+    "attenuation_distance": 48,
+    "name": "csarsenal:grenade/smoke_emit0"
+   }
+  ]
+ },
+ "grenade.throw": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:grenade/throw0"
+   }
+  ]
+ },
+ "impact.concrete": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/concrete0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/concrete1"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/concrete2"
+   }
+  ]
+ },
+ "impact.dirt": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/dirt0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/dirt1"
+   }
+  ]
+ },
+ "impact.flesh": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/flesh0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/flesh1"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/flesh2"
+   }
+  ]
+ },
+ "impact.glass": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/glass0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/glass1"
+   }
+  ]
+ },
+ "impact.headshot": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/headshot0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/headshot1"
+   }
+  ]
+ },
+ "impact.helmet": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/helmet0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/helmet1"
+   }
+  ]
+ },
+ "impact.kevlar": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/kevlar0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/kevlar1"
+   }
+  ]
+ },
+ "impact.metal": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/metal0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/metal1"
+   }
+  ]
+ },
+ "impact.wood": {
+  "sounds": [
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/wood0"
+   },
+   {
+    "attenuation_distance": 24,
+    "name": "csarsenal:impact/wood1"
+   }
+  ]
+ },
+ "knife.deploy": {
+  "sounds": [
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/deploy0"
+   }
+  ]
+ },
+ "knife.hit": {
+  "sounds": [
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/hit0"
+   },
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/hit1"
+   }
+  ]
+ },
+ "knife.hitwall": {
+  "sounds": [
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/hitwall0"
+   },
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/hitwall1"
+   }
+  ]
+ },
+ "knife.slash": {
+  "sounds": [
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/slash0"
+   },
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/slash1"
+   },
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/slash2"
+   }
+  ]
+ },
+ "knife.stab": {
+  "sounds": [
+   {
+    "attenuation_distance": 20,
+    "name": "csarsenal:knife/stab0"
+   }
+  ]
+ },
+ "player.death": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:player/death0"
+   }
+  ]
+ },
+ "reload.mg_box": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/mg_box0"
+   }
+  ]
+ },
+ "reload.mg_cover": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/mg_cover0"
+   }
+  ]
+ },
+ "reload.pistol_magin": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/pistol_magin0"
+   }
+  ]
+ },
+ "reload.pistol_magout": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/pistol_magout0"
+   }
+  ]
+ },
+ "reload.pistol_slide": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/pistol_slide0"
+   }
+  ]
+ },
+ "reload.pump": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/pump0"
+   }
+  ]
+ },
+ "reload.revolver_close": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/revolver_close0"
+   }
+  ]
+ },
+ "reload.revolver_open": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/revolver_open0"
+   }
+  ]
+ },
+ "reload.rifle_boltpull": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_boltpull0"
+   }
+  ]
+ },
+ "reload.rifle_boltrelease": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_boltrelease0"
+   }
+  ]
+ },
+ "reload.rifle_magin": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_magin0"
+   },
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_magin1"
+   }
+  ]
+ },
+ "reload.rifle_magout": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_magout0"
+   },
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/rifle_magout1"
+   }
+  ]
+ },
+ "reload.shell_insert": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/shell_insert0"
+   },
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/shell_insert1"
+   },
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/shell_insert2"
+   }
+  ]
+ },
+ "reload.sniper_boltback": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/sniper_boltback0"
+   }
+  ]
+ },
+ "reload.sniper_boltforward": {
+  "sounds": [
+   {
+    "attenuation_distance": 18,
+    "name": "csarsenal:reload/sniper_boltforward0"
+   }
+  ]
+ },
+ "ui.buy": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:ui/buy0"
+   }
+  ]
+ },
+ "weapon.ak47.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/ak47/far"
+   }
+  ]
+ },
+ "weapon.ak47.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ak47/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ak47/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ak47/fire2"
+   }
+  ]
+ },
+ "weapon.aug.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/aug/far"
+   }
+  ]
+ },
+ "weapon.aug.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/aug/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/aug/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/aug/fire2"
+   }
+  ]
+ },
+ "weapon.awp.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/awp/far"
+   }
+  ]
+ },
+ "weapon.awp.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/awp/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/awp/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/awp/fire2"
+   }
+  ]
+ },
+ "weapon.bizon.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/bizon/far"
+   }
+  ]
+ },
+ "weapon.bizon.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/bizon/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/bizon/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/bizon/fire2"
+   }
+  ]
+ },
+ "weapon.cz75a.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/cz75a/far"
+   }
+  ]
+ },
+ "weapon.cz75a.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/cz75a/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/cz75a/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/cz75a/fire2"
+   }
+  ]
+ },
+ "weapon.deagle.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/deagle/far"
+   }
+  ]
+ },
+ "weapon.deagle.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/deagle/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/deagle/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/deagle/fire2"
+   }
+  ]
+ },
+ "weapon.draw": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/draw0"
+   },
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/draw1"
+   }
+  ]
+ },
+ "weapon.dryfire": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/dryfire0"
+   }
+  ]
+ },
+ "weapon.elite.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/elite/far"
+   }
+  ]
+ },
+ "weapon.elite.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/elite/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/elite/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/elite/fire2"
+   }
+  ]
+ },
+ "weapon.famas.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/famas/far"
+   }
+  ]
+ },
+ "weapon.famas.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/famas/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/famas/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/famas/fire2"
+   }
+  ]
+ },
+ "weapon.fiveseven.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/fiveseven/far"
+   }
+  ]
+ },
+ "weapon.fiveseven.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/fiveseven/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/fiveseven/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/fiveseven/fire2"
+   }
+  ]
+ },
+ "weapon.g3sg1.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/g3sg1/far"
+   }
+  ]
+ },
+ "weapon.g3sg1.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/g3sg1/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/g3sg1/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/g3sg1/fire2"
+   }
+  ]
+ },
+ "weapon.galilar.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/galilar/far"
+   }
+  ]
+ },
+ "weapon.galilar.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/galilar/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/galilar/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/galilar/fire2"
+   }
+  ]
+ },
+ "weapon.glock.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/glock/far"
+   }
+  ]
+ },
+ "weapon.glock.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/glock/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/glock/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/glock/fire2"
+   }
+  ]
+ },
+ "weapon.inspect": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/inspect0"
+   }
+  ]
+ },
+ "weapon.m249.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/m249/far"
+   }
+  ]
+ },
+ "weapon.m249.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m249/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m249/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m249/fire2"
+   }
+  ]
+ },
+ "weapon.m4a1_s.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/m4a1_s/far"
+   }
+  ]
+ },
+ "weapon.m4a1_s.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a1_s/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a1_s/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a1_s/fire2"
+   }
+  ]
+ },
+ "weapon.m4a1_s.fire_sil": {
+  "sounds": [
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/m4a1_s/sil0"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/m4a1_s/sil1"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/m4a1_s/sil2"
+   }
+  ]
+ },
+ "weapon.m4a4.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/m4a4/far"
+   }
+  ]
+ },
+ "weapon.m4a4.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a4/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a4/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/m4a4/fire2"
+   }
+  ]
+ },
+ "weapon.mac10.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/mac10/far"
+   }
+  ]
+ },
+ "weapon.mac10.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mac10/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mac10/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mac10/fire2"
+   }
+  ]
+ },
+ "weapon.mag7.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/mag7/far"
+   }
+  ]
+ },
+ "weapon.mag7.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mag7/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mag7/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mag7/fire2"
+   }
+  ]
+ },
+ "weapon.mp5sd.fire_sil": {
+  "sounds": [
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/mp5sd/sil0"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/mp5sd/sil1"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/mp5sd/sil2"
+   }
+  ]
+ },
+ "weapon.mp7.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/mp7/far"
+   }
+  ]
+ },
+ "weapon.mp7.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp7/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp7/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp7/fire2"
+   }
+  ]
+ },
+ "weapon.mp9.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/mp9/far"
+   }
+  ]
+ },
+ "weapon.mp9.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp9/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp9/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/mp9/fire2"
+   }
+  ]
+ },
+ "weapon.negev.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/negev/far"
+   }
+  ]
+ },
+ "weapon.negev.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/negev/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/negev/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/negev/fire2"
+   }
+  ]
+ },
+ "weapon.nova.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/nova/far"
+   }
+  ]
+ },
+ "weapon.nova.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/nova/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/nova/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/nova/fire2"
+   }
+  ]
+ },
+ "weapon.p2000.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/p2000/far"
+   }
+  ]
+ },
+ "weapon.p2000.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p2000/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p2000/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p2000/fire2"
+   }
+  ]
+ },
+ "weapon.p250.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/p250/far"
+   }
+  ]
+ },
+ "weapon.p250.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p250/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p250/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p250/fire2"
+   }
+  ]
+ },
+ "weapon.p90.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/p90/far"
+   }
+  ]
+ },
+ "weapon.p90.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p90/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p90/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/p90/fire2"
+   }
+  ]
+ },
+ "weapon.revolver.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/revolver/far"
+   }
+  ]
+ },
+ "weapon.revolver.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/revolver/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/revolver/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/revolver/fire2"
+   }
+  ]
+ },
+ "weapon.sawedoff.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/sawedoff/far"
+   }
+  ]
+ },
+ "weapon.sawedoff.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sawedoff/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sawedoff/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sawedoff/fire2"
+   }
+  ]
+ },
+ "weapon.scar20.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/scar20/far"
+   }
+  ]
+ },
+ "weapon.scar20.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/scar20/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/scar20/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/scar20/fire2"
+   }
+  ]
+ },
+ "weapon.sg556.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/sg556/far"
+   }
+  ]
+ },
+ "weapon.sg556.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sg556/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sg556/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/sg556/fire2"
+   }
+  ]
+ },
+ "weapon.silencer_off": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/silencer_off0"
+   }
+  ]
+ },
+ "weapon.silencer_on": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/silencer_on0"
+   }
+  ]
+ },
+ "weapon.ssg08.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/ssg08/far"
+   }
+  ]
+ },
+ "weapon.ssg08.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ssg08/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ssg08/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ssg08/fire2"
+   }
+  ]
+ },
+ "weapon.switchmode": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/switchmode0"
+   }
+  ]
+ },
+ "weapon.taser_fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/taser_fire0"
+   }
+  ]
+ },
+ "weapon.tec9.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/tec9/far"
+   }
+  ]
+ },
+ "weapon.tec9.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/tec9/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/tec9/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/tec9/fire2"
+   }
+  ]
+ },
+ "weapon.ump45.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/ump45/far"
+   }
+  ]
+ },
+ "weapon.ump45.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ump45/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ump45/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/ump45/fire2"
+   }
+  ]
+ },
+ "weapon.usp_s.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/usp_s/far"
+   }
+  ]
+ },
+ "weapon.usp_s.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/usp_s/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/usp_s/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/usp_s/fire2"
+   }
+  ]
+ },
+ "weapon.usp_s.fire_sil": {
+  "sounds": [
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/usp_s/sil0"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/usp_s/sil1"
+   },
+   {
+    "attenuation_distance": 40,
+    "name": "csarsenal:weapon/usp_s/sil2"
+   }
+  ]
+ },
+ "weapon.xm1014.far": {
+  "sounds": [
+   {
+    "attenuation_distance": 320,
+    "name": "csarsenal:weapon/xm1014/far"
+   }
+  ]
+ },
+ "weapon.xm1014.fire": {
+  "sounds": [
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/xm1014/fire0"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/xm1014/fire1"
+   },
+   {
+    "attenuation_distance": 110,
+    "name": "csarsenal:weapon/xm1014/fire2"
+   }
+  ]
+ },
+ "weapon.zoom": {
+  "sounds": [
+   {
+    "attenuation_distance": 16,
+    "name": "csarsenal:weapon/zoom0"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1 @@
+{"parent": "minecraft:builtin/entity", "gui_light": "side", "textures": {"particle": "minecraft:item/iron_ingot"}}

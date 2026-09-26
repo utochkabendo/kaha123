@@ -1,0 +1,142 @@
+{
+ "points": {},
+ "pivots": {},
+ "bones": {
+  "pelvis": {
+   "parent": null,
+   "offset": [
+    0,
+    0.97,
+    0
+   ]
+  },
+  "spine": {
+   "parent": "pelvis",
+   "offset": [
+    0,
+    0.1,
+    0
+   ]
+  },
+  "chest": {
+   "parent": "spine",
+   "offset": [
+    0,
+    0.2,
+    0
+   ]
+  },
+  "neck": {
+   "parent": "chest",
+   "offset": [
+    0,
+    0.21,
+    -0.005
+   ]
+  },
+  "head": {
+   "parent": "neck",
+   "offset": [
+    0,
+    0.05,
+    0.01
+   ]
+  },
+  "upperarm_l": {
+   "parent": "chest",
+   "offset": [
+    0.185,
+    0.165,
+    -0.01
+   ]
+  },
+  "upperarm_r": {
+   "parent": "chest",
+   "offset": [
+    -0.185,
+    0.165,
+    -0.01
+   ]
+  },
+  "forearm_l": {
+   "parent": "upperarm_l",
+   "offset": [
+    0,
+    -0.29,
+    0
+   ]
+  },
+  "forearm_r": {
+   "parent": "upperarm_r",
+   "offset": [
+    0,
+    -0.29,
+    0
+   ]
+  },
+  "hand_l": {
+   "parent": "forearm_l",
+   "offset": [
+    0,
+    -0.255,
+    0
+   ]
+  },
+  "hand_r": {
+   "parent": "forearm_r",
+   "offset": [
+    0,
+    -0.255,
+    0
+   ]
+  },
+  "thigh_l": {
+   "parent": "pelvis",
+   "offset": [
+    0.095,
+    -0.06,
+    0
+   ]
+  },
+  "thigh_r": {
+   "parent": "pelvis",
+   "offset": [
+    -0.095,
+    -0.06,
+    0
+   ]
+  },
+  "shin_l": {
+   "parent": "thigh_l",
+   "offset": [
+    0,
+    -0.42,
+    0
+   ]
+  },
+  "shin_r": {
+   "parent": "thigh_r",
+   "offset": [
+    0,
+    -0.42,
+    0
+   ]
+  },
+  "foot_l": {
+   "parent": "shin_l",
+   "offset": [
+    0,
+    -0.42,
+    0
+   ]
+  },
+  "foot_r": {
+   "parent": "shin_r",
+   "offset": [
+    0,
+    -0.42,
+    0
+   ]
+  }
+ }
+}
