@@ -43,14 +43,6 @@ public final class ClientData {
         return d == null ? 0 : d.team();
     }
 
-    /** texture set for the operator model */
-    public static String teamSkin(Player p) {
-        int t = team(p);
-        if (t == 2) return "ct";
-        if (t == 1) return "t";
-        return (p.getUUID().hashCode() & 1) == 0 ? "t" : "ct";
-    }
-
     public static void clear() {
         DATA.clear();
     }

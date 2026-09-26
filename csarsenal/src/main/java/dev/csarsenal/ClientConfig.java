@@ -5,7 +5,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 /** Client config: crosshair, viewmodel, visuals. */
 public final class ClientConfig {
     public static final ModConfigSpec SPEC;
-    public static final ModConfigSpec.BooleanValue REPLACE_PLAYER_MODEL;
+    public static final ModConfigSpec.BooleanValue RADAR, RADAR_ROTATE;
+    public static final ModConfigSpec.IntValue RADAR_SCALE;
     public static final ModConfigSpec.BooleanValue DYNAMIC_CROSSHAIR;
     public static final ModConfigSpec.IntValue CROSSHAIR_COLOR;
     public static final ModConfigSpec.DoubleValue CROSSHAIR_SIZE;
@@ -27,7 +28,9 @@ public final class ClientConfig {
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
         b.push("visuals");
-        REPLACE_PLAYER_MODEL = b.comment("Render players with the CS operator model (the hitboxes always follow this skeleton)").define("replacePlayerModel", true);
+        RADAR = b.comment("CS radar (top left) while holding a CS item").define("radar", true);
+        RADAR_ROTATE = b.comment("cl_radar_rotate: the radar turns with the view").define("radarRotate", true);
+        RADAR_SCALE = b.comment("cl_radar_scale: blocks shown from the centre to the edge").defineInRange("radarRange", 28, 12, 64);
         HIDE_VANILLA_BARS = b.comment("Hide vanilla hearts/armor bar while holding a CS item (CS HUD shows HP/armor)").define("hideVanillaBars", true);
         MAX_DECALS = b.defineInRange("maxBulletHoles", 256, 0, 4096);
         SHELLS = b.comment("Eject shell casings").define("shellCasings", true);

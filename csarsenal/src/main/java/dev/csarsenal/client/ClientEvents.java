@@ -95,6 +95,8 @@ public final class ClientEvents {
         LocalPlayer p = mc.player;
         ClientSounds.tick();
         dev.csarsenal.client.dev.AutoTest.tick(mc);
+        dev.csarsenal.client.hud.Radar.tick(mc);
+        dev.csarsenal.client.hud.CsHud.tick(mc);
         if (p == null || mc.level == null) return;
         boolean cs = CsMode.active(p);
         if (cs) {

@@ -167,12 +167,6 @@ public final class Meshes extends SimplePreparableReloadListener<Map<String, Mes
         return CsArsenal.id("textures/material/" + mat + ".png");
     }
 
-    private static final Map<String, ResourceLocation> AGENT_TEX = new HashMap<>();
-
-    public static ResourceLocation agentTexture(String team, String mat) {
-        return AGENT_TEX.computeIfAbsent(team + "/" + mat, k -> CsArsenal.id("textures/agent/" + k + ".png"));
-    }
-
     private static final Map<String, ResourceLocation> MAT_TEX = new HashMap<>();
 
     public static ResourceLocation material(String mat) {

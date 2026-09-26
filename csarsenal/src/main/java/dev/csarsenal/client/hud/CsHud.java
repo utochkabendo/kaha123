@@ -97,6 +97,39 @@ public final class CsHud {
         if (ClientConfig.bool(ClientConfig.CROSSHAIR_DOT, false)) bar(g, x - t / 2, y - t / 2, x + t / 2, y + t / 2, color, outline);
         // hit confirmation (brief): not in CS by default, keep subtle
         targetId(g, mc);
+        hurtIndicator(g, mc, cx, cy);
+    }
+
+    private static long hurtTime = -10000;
+    private static float hurtDir;
+    private static int lastHurt;
+
+    /** client tick: remember the direction of the last hit (vanilla sends it for the damage tilt) */
+    public static void tick(Minecraft mc) {
+        LocalPlayer p = mc.player;
+        if (p == null) return;
+        if (p.hurtTime > lastHurt && p.hurtTime >= p.hurtDuration - 1) {
+            hurtTime = System.currentTimeMillis();
+            hurtDir = p.getHurtDir();
+        }
+        lastHurt = p.hurtTime;
+    }
+
+    /** CS damage indicator: a red arc around the crosshair on the side the damage came from */
+    private static void hurtIndicator(GuiGraphics g, Minecraft mc, int cx, int cy) {
+        long age = System.currentTimeMillis() - hurtTime;
+        if (age > 1400 || mc.player == null) return;
+        float a = age < 900 ? 1f : 1f - (age - 900) / 500f;
+        int alpha = (int) (a * 200) << 24;
+        float rel = (hurtDir - 90f) * Mth.DEG_TO_RAD;   // 0 = in front, positive = clockwise
+        int r = Math.min(g.guiWidth(), g.guiHeight()) / 5;
+        for (int i = -6; i <= 6; i++) {
+            float ang = rel + i * 0.045f;
+            float w = 1f - Math.abs(i) / 7f;
+            int px = Math.round(cx + Mth.sin(ang) * r), py = Math.round(cy - Mth.cos(ang) * r);
+            int s = w > 0.6f ? 2 : 1;
+            g.fill(px - s, py - s, px + s + 1, py + s + 1, alpha | 0xD02020);
+        }
     }
 
     private static void bar(GuiGraphics g, float x0, float y0, float x1, float y1, int color, boolean outline) {
@@ -197,7 +230,8 @@ public final class CsHud {
             g.fill(W - f.width(name) - 22, y - 4, W - 6, H - 6, 0x70000000);
             g.drawString(f, name, W - 14 - f.width(name), y + 4, 0xFFE8E8E8, true);
         }
-        money(g, f, p);
+        int top = 6 + Radar.render(g, 6, 6, dt.getGameTimeDeltaPartialTick(true));
+        money(g, f, p, top);
         // C4 planting progress
         if (p.isUsingItem() && p.getUseItem().getItem() instanceof C4Item) {
             float prog = Mth.clamp((C4Item.PLANT_TICKS - p.getUseItemRemainingTicks()) / (float) C4Item.PLANT_TICKS, 0, 1);
@@ -215,7 +249,7 @@ public final class CsHud {
     private static long moneyDeltaTime;
 
     /** CS money (top left) with the "+$300" of the last change */
-    private static void money(GuiGraphics g, Font f, LocalPlayer p) {
+    private static void money(GuiGraphics g, Font f, LocalPlayer p, int top) {
         if (!dev.csarsenal.Config.economy() || p.isCreative()) return;
         int m = ClientData.money(p);
         long now = System.currentTimeMillis();
@@ -226,14 +260,14 @@ public final class CsHud {
         lastMoney = m;
         String s = "$" + m;
         int w = f.width(s) * 2 + 12;
-        g.fill(6, 6, 6 + w, 28, 0x70000000);
-        big(g, f, s, 12, 10, 0xFF8FD35E);
+        g.fill(6, top, 6 + w, top + 22, 0x70000000);
+        big(g, f, s, 12, top + 4, 0xFF8FD35E);
         long age = now - moneyDeltaTime;
         if (moneyDelta != 0 && age < 3000) {
             int a = (int) (255 * Math.min(1, (3000 - age) / 600.0));
             String d = (moneyDelta > 0 ? "+$" : "-$") + Math.abs(moneyDelta);
             int col = (moneyDelta > 0 ? 0x8FD35E : 0xE0524A) | (Math.max(8, a) << 24);
-            g.drawString(f, d, 12, 32, col, true);
+            g.drawString(f, d, 12, top + 26, col, true);
         }
     }
 

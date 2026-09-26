@@ -307,6 +307,14 @@ public final class AutoTest {
                 step(5, mc -> { });
             } else if (s.equals("camself")) {
                 step(2, mc -> { mc.setCameraEntity(mc.player); cmd(mc, "kill @e[tag=cam]"); });
+            } else if (s.startsWith("look:")) {
+                String[] q = s.split(":");
+                float yaw = Float.parseFloat(q[1]), pitch = q.length > 2 ? Float.parseFloat(q[2]) : 0;
+                step(2, mc -> look(mc, yaw, pitch));
+                step(25, mc -> look(mc, yaw, pitch));
+            } else if (s.startsWith("shot:")) {
+                String name = s.substring(5);
+                step(2, mc -> shot(mc, name));
             } else if (s.startsWith("cmd:")) {
                 String c = s.substring(4);
                 step(5, mc -> cmd(mc, c));
