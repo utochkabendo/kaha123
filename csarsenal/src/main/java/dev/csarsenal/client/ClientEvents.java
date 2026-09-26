@@ -16,7 +16,6 @@ import dev.csarsenal.client.hud.CsHud;
 import dev.csarsenal.client.move.CsMovement;
 import dev.csarsenal.client.move.SubtickInput;
 import dev.csarsenal.client.render.AgentPose;
-import dev.csarsenal.client.render.AgentRenderer;
 import dev.csarsenal.client.render.ViewModelRenderer;
 import dev.csarsenal.client.weapon.ClientWeapon;
 import dev.csarsenal.entity.GrenadeEntity;
@@ -53,7 +52,6 @@ import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.PlayLevelSoundEvent;
@@ -82,6 +80,12 @@ public final class ClientEvents {
         SubtickInput.crouchDown = cs && Keys.rawDown(Keys.CROUCH);
         SubtickInput.sample(mc);
         ClientWeapon.INSTANCE.frame(mc, e.getPartialTick().getGameTimeDeltaPartialTick(true));
+        if (dev.csarsenal.client.dev.AutoTest.enabled()) dev.csarsenal.client.dev.AutoTest.preFrame(mc);
+    }
+
+    @SubscribeEvent
+    public static void frameEnd(RenderFrameEvent.Post e) {
+        if (dev.csarsenal.client.dev.AutoTest.enabled()) dev.csarsenal.client.dev.AutoTest.postFrame(Minecraft.getInstance());
     }
 
     // ------------------------------------------------------------------------------------------ tick
@@ -90,6 +94,7 @@ public final class ClientEvents {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer p = mc.player;
         ClientSounds.tick();
+        dev.csarsenal.client.dev.AutoTest.tick(mc);
         if (p == null || mc.level == null) return;
         boolean cs = CsMode.active(p);
         if (cs) {
@@ -167,24 +172,15 @@ public final class ClientEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void player(RenderPlayerEvent.Pre e) {
-        if (!ClientConfig.bool(ClientConfig.REPLACE_PLAYER_MODEL, true)) return;
-        if (AgentRenderer.render(e.getEntity(), e.getPartialTick(), e.getPoseStack(), e.getMultiBufferSource(), e.getPackedLight())) {
-            e.setCanceled(true);
-        }
-    }
-
+    /** CS view punch: the camera follows 45% of the (smooth) recoil. No random shake. */
     @SubscribeEvent
     public static void camera(ViewportEvent.ComputeCameraAngles e) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || !mc.options.getCameraType().isFirstPerson()) return;
         ClientWeapon w = ClientWeapon.INSTANCE;
         float track = RecoilPattern.RECOIL_SCALE * RecoilPattern.VIEW_TRACKING;
-        float shake = (float) ClientFx.cameraShake;
-        e.setPitch(e.getPitch() - w.punch[1] * track - w.shakePitch * 0.35f + (R.nextFloat() - 0.5f) * shake);
-        e.setYaw(e.getYaw() + w.punch[0] * track + w.shakeYaw * 0.35f + (R.nextFloat() - 0.5f) * shake);
-        e.setRoll(e.getRoll() + w.shakeRoll * 0.3f);
+        e.setPitch(e.getPitch() - w.punch[1] * track);
+        e.setYaw(e.getYaw() + w.punch[0] * track);
     }
 
     @SubscribeEvent
@@ -192,7 +188,9 @@ public final class ClientEvents {
         ClientWeapon w = ClientWeapon.INSTANCE;
         if (w.def == null) return;
         if (!e.usedConfiguredFov()) {
-            e.setFOV(ClientConfig.num(ClientConfig.VIEWMODEL_FOV, 68.0));
+            // hand pass: CS renders the view model with its own viewmodel_fov (horizontal, 4:3 basis)
+            double hf = Math.toRadians(ClientConfig.num(ClientConfig.VIEWMODEL_FOV, 68) + ViewModelRenderer.tune("fov", 0));
+            e.setFOV(Math.toDegrees(2 * Math.atan(Math.tan(hf / 2) * 0.75)));
             return;
         }
         if (w.isScoped()) {
@@ -242,7 +240,7 @@ public final class ClientEvents {
         ps.translate(-cam.x, -cam.y, -cam.z);
         for (Entity en : mc.level.entitiesForRendering()) {
             if (!(en instanceof LivingEntity) || en.distanceToSqr(cam) > 48 * 48) continue;
-            if (en == mc.player && mc.options.getCameraType().isFirstPerson()) continue;
+            if (en == mc.getCameraEntity() && mc.options.getCameraType().isFirstPerson()) continue;
             List<HitShape> shapes = Hitboxes.forEntity(en, pt);
             for (HitShape s : shapes) drawShape(vc, ps, s);
         }

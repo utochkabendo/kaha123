@@ -4,7 +4,6 @@ import dev.csarsenal.ballistics.HitGroup;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
@@ -27,12 +26,12 @@ import java.util.List;
  */
 public final class Hitboxes {
     /** Supplied by the client so hit detection uses the exact rendered pose (anim state lives client side). */
-    public interface PlayerPoser {
-        Skeleton pose(Player p, float partialTick);
+    public interface PlayerShapes {
+        List<HitShape> shapes(Player p, float partialTick);
     }
 
-    public static PlayerPoser poser;
-    private static final ThreadLocal<Skeleton> SERVER_SKELETON = ThreadLocal.withInitial(Skeleton::new);
+    public static PlayerShapes poser;
+    private static final ThreadLocal<McPose> SERVER_POSE = ThreadLocal.withInitial(McPose::new);
     private static final ThreadLocal<PoseInput> SERVER_INPUT = ThreadLocal.withInitial(PoseInput::new);
 
     public static Matrix4f world(double x, double y, double z, float bodyYaw) {
@@ -42,18 +41,10 @@ public final class Hitboxes {
     public static List<HitShape> forEntity(Entity e, float pt) {
         double x = Mth.lerp(pt, e.xo, e.getX()), y = Mth.lerp(pt, e.yo, e.getY()), z = Mth.lerp(pt, e.zo, e.getZ());
         if (e instanceof Player p) {
-            Skeleton sk;
-            if (poser != null && p.level().isClientSide) {
-                sk = poser.pose(p, pt);
-            } else {
-                PoseInput in = SERVER_INPUT.get().reset();
-                in.pitch = p.getXRot();
-                in.yawRel = Mth.wrapDegrees(p.getYHeadRot() - p.yBodyRot);
-                in.crouch = p.getPose() == Pose.CROUCHING ? 1 : 0;
-                sk = SERVER_SKELETON.get().compute(in);
-            }
-            float by = Mth.rotLerp(pt, p.yBodyRotO, p.yBodyRot);
-            return fromSkeleton(sk, world(x, y, z, by), p.getBbHeight() / (p.getPose() == Pose.CROUCHING ? 1.35f : 1.8f));
+            if (poser != null && p.level().isClientSide) return poser.shapes(p, pt);
+            PoseInput in = SERVER_INPUT.get().reset();
+            McPose pose = SERVER_POSE.get().compute(in, p.isCrouching(), Mth.wrapDegrees(p.getYHeadRot() - p.yBodyRot), p.getXRot());
+            return pose.shapes(McPose.modelToWorld(x, y, z, Mth.rotLerp(pt, p.yBodyRotO, p.yBodyRot), p.isCrouching(), 0.9375f));
         }
         if (e instanceof LivingEntity le && isHumanoid(le)) {
             return humanoid(le, x, y, z, pt);
@@ -64,43 +55,6 @@ public final class Hitboxes {
     public static boolean isHumanoid(LivingEntity e) {
         return e instanceof Zombie || e instanceof AbstractSkeleton || e instanceof AbstractIllager || e instanceof AbstractPiglin
                 || e instanceof AbstractVillager || e instanceof Witch || e instanceof ArmorStand;
-    }
-
-    public static List<HitShape> fromSkeleton(Skeleton sk, Matrix4f world, float scaleHint) {
-        List<HitShape> out = new ArrayList<>(20);
-        Matrix4f m = new Matrix4f();
-        mul(world, sk.bones[Skeleton.HEAD], m);
-        out.add(HitShape.capsule(HitGroup.HEAD, m, 0, 0.06f, 0.015f, 0, 0.155f, 0.0f, 0.088f));
-        mul(world, sk.bones[Skeleton.NECK], m);
-        out.add(HitShape.capsule(HitGroup.HEAD, m, 0, -0.01f, 0, 0, 0.05f, 0.005f, 0.052f));
-        mul(world, sk.bones[Skeleton.CHEST], m);
-        out.add(HitShape.box(HitGroup.CHEST, m, 0, 0.10f, 0.012f, 0.175f, 0.12f, 0.12f));
-        mul(world, sk.bones[Skeleton.SPINE], m);
-        out.add(HitShape.box(HitGroup.STOMACH, m, 0, 0.10f, 0.004f, 0.155f, 0.105f, 0.105f));
-        mul(world, sk.bones[Skeleton.PELVIS], m);
-        out.add(HitShape.box(HitGroup.STOMACH, m, 0, -0.03f, 0, 0.165f, 0.105f, 0.105f));
-        for (int side = 0; side < 2; side++) {
-            boolean l = side == 0;
-            HitGroup arm = l ? HitGroup.LEFT_ARM : HitGroup.RIGHT_ARM;
-            HitGroup leg = l ? HitGroup.LEFT_LEG : HitGroup.RIGHT_LEG;
-            mul(world, sk.bones[l ? Skeleton.UPPERARM_L : Skeleton.UPPERARM_R], m);
-            out.add(HitShape.capsule(arm, m, 0, 0, 0, 0, -Skeleton.UPPER_ARM, 0, 0.055f));
-            mul(world, sk.bones[l ? Skeleton.FOREARM_L : Skeleton.FOREARM_R], m);
-            out.add(HitShape.capsule(arm, m, 0, 0, 0, 0, -Skeleton.FOREARM, 0, 0.043f));
-            mul(world, sk.bones[l ? Skeleton.HAND_L : Skeleton.HAND_R], m);
-            out.add(HitShape.capsule(arm, m, 0, -0.03f, 0, 0, -0.085f, 0, 0.04f));
-            mul(world, sk.bones[l ? Skeleton.THIGH_L : Skeleton.THIGH_R], m);
-            out.add(HitShape.capsule(leg, m, 0, 0, 0, 0, -Skeleton.THIGH, 0, 0.08f));
-            mul(world, sk.bones[l ? Skeleton.SHIN_L : Skeleton.SHIN_R], m);
-            out.add(HitShape.capsule(leg, m, 0, 0, 0, 0, -Skeleton.SHIN, 0, 0.058f));
-            mul(world, sk.bones[l ? Skeleton.FOOT_L : Skeleton.FOOT_R], m);
-            out.add(HitShape.box(leg, m, 0, -0.04f, 0.06f, 0.05f, 0.04f, 0.12f));
-        }
-        return out;
-    }
-
-    private static void mul(Matrix4f a, Matrix4f b, Matrix4f out) {
-        a.mul(b, out);
     }
 
     /** Minecraft HumanoidModel proportions, scaled to the entity height. */

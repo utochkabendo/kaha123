@@ -31,7 +31,7 @@ public final class Config {
         BREAK_GLASS = b.comment("Bullets shatter glass blocks and panes").define("bulletsBreakGlass", true);
         FRIENDLY_FIRE = b.comment("Damage players of the same CS team").define("friendlyFire", true);
         INFINITE_RESERVE = b.comment("Reserve ammo never runs out").define("infiniteReserve", false);
-        CS_CROUCH_HITBOX = b.comment("Use CS crouch height (1.35 blocks) instead of Minecraft's 1.5 while in CS mode").define("csCrouchHeight", true);
+        CS_CROUCH_HITBOX = b.comment("Use CS crouch height (1.35 blocks) instead of Minecraft's 1.5 while in CS mode").define("csCrouchHeight", false);
         C4_BREAKS_BLOCKS = b.comment("The C4 explosion destroys blocks").define("c4BreaksBlocks", false);
         BOMB_TIMER = b.comment("C4 timer in seconds").defineInRange("bombTimer", 40, 10, 300);
         HIT_TOLERANCE = b.comment("Extra distance (blocks) accepted when validating client reported hits (lag compensation)").defineInRange("hitTolerance", 1.0, 0.0, 8.0);

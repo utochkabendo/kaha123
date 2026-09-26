@@ -189,10 +189,7 @@ def build_all(root):
     tex = os.path.join(root, 'assets/csarsenal/textures')
     for name, fn in WEAPON_MATERIALS.items():
         save(fn(), f'{tex}/material/{name}.png')
-    for team, mats in AGENT.items():
-        for name, fn in {**AGENT_COMMON, **mats}.items():
-            save(fn(), f'{tex}/agent/{team}/{name}.png')
-    return list(WEAPON_MATERIALS) + [f'agent/{t}/{m}' for t in AGENT for m in {**AGENT_COMMON, **AGENT[t]}]
+    return list(WEAPON_MATERIALS)
 
 
 if __name__ == '__main__':

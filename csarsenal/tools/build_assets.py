@@ -200,9 +200,7 @@ def main():
         W = fn()
         meshlib.export_model(W, f'{mesh_dir}/{W.name}.csm', f'{mesh_dir}/{W.name}.json', uv_scale=WEAPON_UV)
         extra.append(W.name)
-    A = character.build()
-    na = meshlib.export_model(A, f'{mesh_dir}/agent.csm', f'{mesh_dir}/agent.json', space='direct', smooth_angle=55.0, uv_scale=AGENT_UV)
-    print(f'meshes: {len(ITEMS)} items, {total} tris, agent {na} tris ({time.time() - t0:.1f}s)')
+    print(f'meshes: {len(ITEMS)} items, {total} tris ({time.time() - t0:.1f}s)')
     ntex = len(textures.build_all(ROOT)) + fxtextures.build(ROOT)
     print(f'textures: {ntex}')
     ev = sounds.build_all(ROOT)
@@ -226,7 +224,7 @@ def main():
         with open(f'{ldir}/{name}.json', 'w', encoding='utf-8') as fp:
             json.dump(m, fp, indent=1, ensure_ascii=False, sort_keys=True)
     with open(os.path.join(ASSETS, 'meshes', 'index.json'), 'w') as fp:
-        json.dump([i[0] for i in ITEMS] + extra + ['agent'], fp)
+        json.dump([i[0] for i in ITEMS] + extra, fp)
     print(f'done in {time.time() - t0:.1f}s')
 
 

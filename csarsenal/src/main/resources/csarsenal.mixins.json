@@ -7,7 +7,9 @@
     "PlayerMixin",
     "LivingEntityMixin"
   ],
-  "client": [],
+  "client": [
+    "client.HumanoidModelMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

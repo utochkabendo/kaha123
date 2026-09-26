@@ -194,8 +194,8 @@ public final class ClientWeapon {
             if (!silencerBusy()) silencerOn = st.silencer();
         }
         boolean input = mc.screen == null && !p.isSpectator() && p.isAlive();
-        boolean attack = input && mc.options.keyAttack.isDown();
-        boolean use = input && mc.options.keyUse.isDown();
+        boolean attack = input && (mc.options.keyAttack.isDown() || testAttack);
+        boolean use = input && (mc.options.keyUse.isDown() || testUse);
 
         if (SubtickInput.walkDown != walkSent) {
             walkSent = SubtickInput.walkDown;
@@ -476,9 +476,6 @@ public final class ClientWeapon {
         punch[1] += kicks[idx][1] * mul;
         recoilIndex += 1;
         penalty += alt ? def.inaccFireAlt : def.inaccFire;
-        shakePitch += def.viewPunch;
-        shakeYaw += (RNG.nextFloat() - 0.5f) * def.viewPunch * 0.6f;
-        shakeRoll += (RNG.nextFloat() - 0.5f) * def.viewPunch * 0.5f;
         if (def.boltAction) {
             boltStart = now;
             if (zoom > 0) {
@@ -573,10 +570,32 @@ public final class ClientWeapon {
     // ============================================================================================ feedback
     public void onTagged(Packets.Tagged t) {
         CsMovement.INSTANCE.tag(t.tagging() * Mth.clamp(t.damage() / 40f, 0.3f, 1f));
-        float k = t.headshot() ? 2.5f : 1.2f;
-        shakePitch += k * (0.5f + RNG.nextFloat());
-        shakeYaw += (RNG.nextFloat() - 0.5f) * k;
-        shakeRoll += (RNG.nextFloat() - 0.5f) * k * 2;
+    }
+
+    // ---------------------------------------------------------------- dev autotest hooks
+    public boolean testAttack, testUse;
+
+    public void testTrigger(boolean on) {
+        testAttack = on;
+    }
+
+    public void testReload() {
+        startReload();
+    }
+
+    public void testKnife(boolean heavy) {
+        knifeStart = now;
+        knifeHeavy = heavy;
+        knifeSide ^= 1;
+    }
+
+    public void testPin() {
+        pinPulled = true;
+        pinStart = now;
+    }
+
+    public void testScope() {
+        if (def != null && def.hasScope()) zoom = 1;
     }
 
     public boolean isC4() {

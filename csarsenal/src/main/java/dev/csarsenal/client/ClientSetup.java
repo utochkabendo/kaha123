@@ -66,6 +66,13 @@ public final class ClientSetup {
     }
 
     @SubscribeEvent
+    public static void layers(EntityRenderersEvent.AddLayers e) {
+        for (net.minecraft.client.resources.PlayerSkin.Model skin : e.getSkins()) {
+            if (e.getSkin(skin) instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer r) r.addLayer(new dev.csarsenal.client.render.GunLayer(r));
+        }
+    }
+
+    @SubscribeEvent
     public static void particles(RegisterParticleProvidersEvent e) {
         e.registerSpriteSet(ModParticles.SMOKE.get(), CsParticles.SmokeProvider::new);
         e.registerSpriteSet(ModParticles.IMPACT.get(), CsParticles.ImpactProvider::new);

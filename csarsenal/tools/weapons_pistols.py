@@ -258,8 +258,10 @@ def karambit():
     W = Model('karambit')
     W.add('body', loft([(-50, 0, 0, 11, 9), (-45, 0, 0, 13, 10), (30, 0, 0, 13, 10), (36, 0, 0, 11, 9)], 'polymer', axis='x', segs=14, squareness=0.3))
     W.add('body', torus((-66, 0, 0), 14, 4.5, 'metal_dark', segs=18, tube=8, axis='z'))
-    pts = arc(36, -60, 75, 90, 30, 10)
-    W.add('body', extrude(strip(pts, 22, 4), -2.5, 2.5, 'blade', bevel=1.8))
+    # strongly hooked claw blade (~70 deg of arc), wide at the root and tapering to a needle tip
+    pts = arc(40, -85, 100, 92, 22, 14)
+    W.add('body', extrude(strip(pts, 27, 3), -2.6, 2.6, 'blade', bevel=1.8))
+    W.add('body', box(28, -13, -6, 40, 17, 6, 'metal_dark', bevel=1.5))  # bolster
     W.point('grip', 0, 0)
     W.point('tip', pts[-1][0], pts[-1][1])
     W.props.update(knife=True)

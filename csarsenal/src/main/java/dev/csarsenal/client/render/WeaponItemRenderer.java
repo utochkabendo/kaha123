@@ -28,6 +28,8 @@ public final class WeaponItemRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(ItemStack stack, ItemDisplayContext ctx, PoseStack ps, MultiBufferSource buf, int light, int overlay) {
         WeaponDef def = CsItem.defOf(stack);
         if (def == null) return;
+        // players draw their weapon through GunLayer (posed with the hitboxes)
+        if (ctx == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || ctx == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) return;
         Mesh mesh = Meshes.get(def.mesh);
         if (mesh == null) return;
         boolean silencer = def.silencer && stack.getItem() instanceof WeaponItem && WeaponItem.state(stack).silencer();

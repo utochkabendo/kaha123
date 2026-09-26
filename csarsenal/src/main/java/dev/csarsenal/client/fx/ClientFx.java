@@ -121,7 +121,6 @@ public final class ClientFx {
         LocalPlayer p = mc.player;
         if (p == null) return;
         muzzleFlashTime = System.nanoTime() / 1e9;
-        cameraShake = Math.max(cameraShake, d.viewPunch * 0.2);
         Vec3 look = p.getLookAngle();
         Vec3 right = look.cross(new Vec3(0, 1, 0)).normalize();
         Vec3 up = right.cross(look).normalize();
@@ -180,7 +179,6 @@ public final class ClientFx {
                 }
                 if (big) {
                     SmokeManager.clear(p, 5.5);
-                    cameraShake = Math.max(cameraShake, Mth.clamp(1.5 - distToMe / 12, 0, 1.5));
                 }
             }
             case Packets.Effect.FLASH -> {
@@ -216,7 +214,6 @@ public final class ClientFx {
                 }
                 level.addParticle(ParticleTypes.EXPLOSION_EMITTER, p.x, p.y + 0.5, p.z, 0, 0, 0);
                 SmokeManager.clear(p, 12);
-                cameraShake = Math.max(cameraShake, Mth.clamp(3 - distToMe / 20, 0, 3));
             }
             case Packets.Effect.TASER -> {
                 Player shooter = mc.player;

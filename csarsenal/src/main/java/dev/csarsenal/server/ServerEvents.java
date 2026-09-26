@@ -27,7 +27,7 @@ public final class ServerEvents {
     public static void onSize(EntityEvent.Size e) {
         if (!(e.getEntity() instanceof Player p)) return;
         if (e.getPose() != Pose.CROUCHING) return;
-        if (!Config.get(Config.CS_CROUCH_HITBOX, true)) return;
+        if (!Config.get(Config.CS_CROUCH_HITBOX, false)) return;
         try {
             if (!CsMode.active(p)) return;
         } catch (Exception ex) {

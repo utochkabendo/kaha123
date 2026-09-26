@@ -19,6 +19,10 @@ neoForge {
         client {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            if (project.hasProperty('autotest')) {
+                systemProperty 'csarsenal.autotest', project.property('autotest')
+                programArguments.addAll('--quickPlaySingleplayer', 'test', '--width', '1280', '--height', '720')
+            }
         }
         server {
             server()

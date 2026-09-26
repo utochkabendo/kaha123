@@ -134,6 +134,12 @@ def scope_dot(n):
     arr[..., 0] = np.maximum(arr[..., 0], ring * 255); arr[..., 3] = np.maximum(arr[..., 3], ring * 200)
     return arr
 
+def premul(img):
+    img = img.copy()
+    a = img[..., 3:4] / 255.0
+    img[..., :3] = img[..., :3] * a
+    return img
+
 def build(root):
     tex = os.path.join(root, 'assets/csarsenal/textures')
     parts = {}
@@ -144,7 +150,7 @@ def build(root):
         save(puff(16, 320 + i), f'{tex}/particle/impact_{i}.png')
     parts['impact'] = [f'csarsenal:impact_{i}' for i in range(3)]
     parts['muzzle_smoke'] = [f'csarsenal:impact_{i}' for i in range(3)]
-    save(spark(8), f'{tex}/particle/spark.png'); parts['spark'] = ['csarsenal:spark']
+    save(premul(spark(8)), f'{tex}/particle/spark.png'); parts['spark'] = ['csarsenal:spark']
     for i in range(3):
         save(blood(16, 340 + i), f'{tex}/particle/blood_{i}.png')
     parts['blood'] = [f'csarsenal:blood_{i}' for i in range(3)]
@@ -157,8 +163,8 @@ def build(root):
     pdir = os.path.join(root, 'assets/csarsenal/particles'); os.makedirs(pdir, exist_ok=True)
     for k, v in parts.items():
         json.dump({'textures': v}, open(f'{pdir}/{k}.json', 'w'))
-    save(muzzle_front(64), f'{tex}/fx/muzzle_front.png')
-    save(muzzle_side(128, 48), f'{tex}/fx/muzzle_side.png')
+    save(premul(muzzle_front(64)), f'{tex}/fx/muzzle_front.png')
+    save(premul(muzzle_side(128, 48)), f'{tex}/fx/muzzle_side.png')
     for kind in ('concrete', 'wood', 'metal', 'glass', 'dirt'):
         save(hole(32, kind, hash(kind) % 1000), f'{tex}/fx/hole_{kind}.png')
     save(scope(1024), f'{tex}/gui/scope.png')
