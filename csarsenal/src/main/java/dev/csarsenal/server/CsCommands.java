@@ -39,6 +39,11 @@ public final class CsCommands {
                                 .executes(c -> money(java.util.List.of(c.getSource().getPlayerOrException()), IntegerArgumentType.getInteger(c, "amount")))
                                 .then(Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
                                         .executes(c -> money(net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"), IntegerArgumentType.getInteger(c, "amount"))))))
+                .then(Commands.literal("stats").requires(s -> s.hasPermission(2))
+                        .then(Commands.literal("reset").executes(c -> {
+                            CsStats.reset();
+                            return 1;
+                        })))
                 .then(Commands.literal("refill").requires(s -> s.hasPermission(2)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     for (int i = 0; i < p.getInventory().getContainerSize(); i++) {

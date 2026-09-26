@@ -53,6 +53,7 @@ public final class ServerEvents {
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         if (!(e.getEntity() instanceof ServerPlayer sp)) return;
+        CsStats.markDirty();
         CsPlayerData d = CsPlayerData.get(sp);
         if (d.money() < 0) sp.setData(ModAttachments.CS_DATA, d.withMoney(Config.startMoney()));
         CsPlayerData.sync(sp);
@@ -61,6 +62,7 @@ public final class ServerEvents {
     /** CS kill rewards: the weapon's reward for killing a player (or, scaled, a hostile mob); -$300 for a teammate */
     @SubscribeEvent
     public static void onKill(net.neoforged.neoforge.event.entity.living.LivingDeathEvent e) {
+        if (e.getEntity() instanceof ServerPlayer victimPlayer) CsStats.death(victimPlayer, e.getSource());
         if (!(e.getSource().getEntity() instanceof ServerPlayer killer) || e.getEntity() == killer) return;
         if (!Config.economy()) return;
         var victim = e.getEntity();
@@ -102,13 +104,20 @@ public final class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onServerTick(net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) {
+        CsStats.tick(e.getServer());
+    }
+
+    @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent e) {
+        CsStats.markDirty();
         if (e.getEntity() instanceof ServerPlayer sp) PlayerState.remove(sp);
     }
 
     @SubscribeEvent
     public static void onStopped(ServerStoppedEvent e) {
         PlayerState.clear();
+        CsStats.reset();
     }
 
     private ServerEvents() {

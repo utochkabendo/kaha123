@@ -213,6 +213,40 @@ public final class Packets {
         }
     }
 
+    /** scoreboard rows of every player (sent when anything changes) */
+    public record Scoreboard(java.util.List<Row> rows) implements CustomPacketPayload {
+        public record Row(java.util.UUID id, String name, int team, int kills, int assists, int deaths, int headshots, int damage, int money) {
+        }
+
+        public static final Type<Scoreboard> TYPE = ptype("scoreboard");
+        public static final StreamCodec<FriendlyByteBuf, Scoreboard> CODEC = StreamCodec.ofMember((p, b) -> {
+            b.writeVarInt(p.rows.size());
+            for (Row r : p.rows) {
+                b.writeUUID(r.id);
+                b.writeUtf(r.name, 64);
+                b.writeByte(r.team);
+                b.writeVarInt(r.kills + 1000);
+                b.writeVarInt(r.assists);
+                b.writeVarInt(r.deaths);
+                b.writeVarInt(r.headshots);
+                b.writeVarInt(r.damage);
+                b.writeVarInt(r.money);
+            }
+        }, b -> {
+            int n = Math.min(b.readVarInt(), 256);
+            java.util.List<Row> rows = new java.util.ArrayList<>(n);
+            for (int i = 0; i < n; i++) {
+                rows.add(new Row(b.readUUID(), b.readUtf(64), b.readByte(), b.readVarInt() - 1000, b.readVarInt(), b.readVarInt(), b.readVarInt(), b.readVarInt(), b.readVarInt()));
+            }
+            return new Scoreboard(rows);
+        });
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public record KillFeed(String killer, int killerTeam, String victim, int victimTeam, int weapon, int flags) implements CustomPacketPayload {
         public static final int HEADSHOT = 1, WALLBANG = 2, NOSCOPE = 4, SMOKE = 8, BLIND = 16, AIR = 32;
         public static final Type<KillFeed> TYPE = ptype("kill_feed");

@@ -84,6 +84,7 @@ public final class CsDamage {
         }
         if (attacker instanceof ServerPlayer ap && ap != victim) {
             PacketDistributor.sendToPlayer(ap, new Packets.HitConfirm(victim.getId(), dmg, c.group.ordinal(), killed));
+            if (victim instanceof ServerPlayer vp) CsStats.damage(ap, vp, Math.min(dmg, before / Config.damageScale()));
         }
         if (killed) killFeed(level, attacker, victim, c);
         return Math.min(dmg, before / Config.damageScale());

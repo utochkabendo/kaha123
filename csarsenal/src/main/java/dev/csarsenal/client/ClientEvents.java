@@ -217,6 +217,7 @@ public final class ClientEvents {
         if (!CsHud.active()) return;
         var n = e.getName();
         if (n.equals(VanillaGuiLayers.CROSSHAIR)) e.setCanceled(true);
+        if (n.equals(VanillaGuiLayers.TAB_LIST) && dev.csarsenal.client.hud.CsScoreboard.showing()) e.setCanceled(true);
         if (ClientConfig.bool(ClientConfig.HIDE_VANILLA_BARS, true) && (n.equals(VanillaGuiLayers.PLAYER_HEALTH) || n.equals(VanillaGuiLayers.ARMOR_LEVEL))) {
             e.setCanceled(true);
         }

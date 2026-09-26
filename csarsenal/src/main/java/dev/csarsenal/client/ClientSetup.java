@@ -56,6 +56,7 @@ public final class ClientSetup {
         e.registerAbove(VanillaGuiLayers.CROSSHAIR, CsArsenal.id("crosshair"), CsHud::crosshair);
         e.registerAbove(VanillaGuiLayers.HOTBAR, CsArsenal.id("status"), CsHud::status);
         e.registerAboveAll(CsArsenal.id("flash"), CsHud::flash);
+        e.registerAbove(VanillaGuiLayers.TAB_LIST, CsArsenal.id("scoreboard"), dev.csarsenal.client.hud.CsScoreboard::render);
     }
 
     @SubscribeEvent

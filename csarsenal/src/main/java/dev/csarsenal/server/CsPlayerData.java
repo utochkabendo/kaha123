@@ -61,6 +61,7 @@ public record CsPlayerData(int armor, boolean helmet, boolean defuser, int team,
 
     public static void sync(ServerPlayer p) {
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(p, payload(p));
+        CsStats.markDirty();
     }
 
     /** add (or with a negative amount take) money, clamped to 0..max; returns the amount actually applied */

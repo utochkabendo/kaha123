@@ -105,6 +105,11 @@ public final class ClientPackets implements Net.ClientHandler {
         ClientData.put(p);
     }
 
+    @Override
+    public void scoreboard(Packets.Scoreboard p) {
+        dev.csarsenal.client.hud.CsScoreboard.update(p);
+    }
+
     private ClientPackets() {
     }
 }

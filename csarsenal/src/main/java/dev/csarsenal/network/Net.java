@@ -24,6 +24,8 @@ public final class Net {
         void effect(Packets.Effect p);
 
         void csData(CsDataPayload p);
+
+        void scoreboard(Packets.Scoreboard p);
     }
 
     public static volatile ClientHandler client;
@@ -45,6 +47,7 @@ public final class Net {
         r.playToClient(Packets.Anim.TYPE, Packets.Anim.CODEC, (p, c) -> c.enqueueWork(() -> { if (client != null) client.anim(p); }));
         r.playToClient(Packets.Effect.TYPE, Packets.Effect.CODEC, (p, c) -> c.enqueueWork(() -> { if (client != null) client.effect(p); }));
         r.playToClient(CsDataPayload.TYPE, CsDataPayload.CODEC, (p, c) -> c.enqueueWork(() -> { if (client != null) client.csData(p); }));
+        r.playToClient(Packets.Scoreboard.TYPE, Packets.Scoreboard.CODEC, (p, c) -> c.enqueueWork(() -> { if (client != null) client.scoreboard(p); }));
     }
 
     private static void server(IPayloadContext c, java.util.function.Consumer<net.minecraft.server.level.ServerPlayer> handler) {

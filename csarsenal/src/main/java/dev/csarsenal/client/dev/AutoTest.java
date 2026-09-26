@@ -312,6 +312,11 @@ public final class AutoTest {
                 float yaw = Float.parseFloat(q[1]), pitch = q.length > 2 ? Float.parseFloat(q[2]) : 0;
                 step(2, mc -> look(mc, yaw, pitch));
                 step(25, mc -> look(mc, yaw, pitch));
+            } else if (s.startsWith("tab:")) {
+                String name = s.substring(4);
+                step(2, mc -> mc.options.keyPlayerList.setDown(true));
+                step(6, mc -> shot(mc, name));
+                step(2, mc -> mc.options.keyPlayerList.setDown(false));
             } else if (s.startsWith("shot:")) {
                 String name = s.substring(5);
                 step(2, mc -> shot(mc, name));

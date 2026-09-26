@@ -176,7 +176,7 @@ public final class ViewModelRenderer {
                 default -> {
                 }
             }
-            if (g.magTop) pos.add(0.01f, -0.02f, -0.06f);
+            if (g.magTop) pos.add(0.02f, -0.035f, -0.12f);   // P90: tall bullpup with the magazine on top
         }
         pos.add((float) (ClientConfig.num(ClientConfig.VIEWMODEL_X, 1) - 1) * 0.012f, (float) (ClientConfig.num(ClientConfig.VIEWMODEL_Y, 1) - 1) * 0.012f,
                 (float) (ClientConfig.num(ClientConfig.VIEWMODEL_Z, -1) + 1) * -0.012f);
@@ -284,11 +284,12 @@ public final class ViewModelRenderer {
         Matrix4f base = new Matrix4f().rotateY(rad(bYaw)).rotateX(rad(bPitch)).rotateZ(rad(bRoll));
         Matrix3f animRot = new Matrix3f().rotateY(rad(a[4])).rotateX(rad(a[3])).rotateZ(rad(a[5]));
         Vector3f pr = base.transformDirection(new Vector3f(pivot).sub(g.grip));
-        Matrix4f gunRest = new Matrix4f().translate(pos).mul(base).translate(-g.grip.x, -g.grip.y, -g.grip.z);
+        float k = itemScale(def, mesh);
+        Matrix4f gunRest = new Matrix4f().translate(pos).mul(base).scale(k).translate(-g.grip.x, -g.grip.y, -g.grip.z);
         Matrix4f gun = new Matrix4f().translate(pos.x + a[0], pos.y + a[1], pos.z + a[2])
                 .translate(pr).mul(new Matrix4f().set(animRot)).translate(-pr.x, -pr.y, -pr.z)
                 .rotateY(rad(aw[1])).rotateX(rad(aw[0])).rotateZ(rad(aw[2]))
-                .mul(base).translate(-g.grip.x, -g.grip.y, -g.grip.z);
+                .mul(base).scale(k).translate(-g.grip.x, -g.grip.y, -g.grip.z);
         // knife tricks: a twist about the handle, the karambit twirl about its ring (the forearm does not follow these)
         if (twist != 0) gun.translate(g.grip).rotateZ(rad(twist)).translate(-g.grip.x, -g.grip.y, -g.grip.z);
         Vector3f ring = new Vector3f(0, 0, 0.066f);
@@ -386,7 +387,17 @@ public final class ViewModelRenderer {
                 pL = new Vector3f(g.support).add(0, vertical ? -0.02f : 0.012f, 0);
                 axL = vertical ? new Vector3f(0, 1, 0) : new Vector3f(0, 0, -1);
             }
-            case PISTOL -> { pL = new Vector3f(g.grip).add(new Vector3f(up).mul(-0.062f)).add(-0.022f, 0, -0.012f); axL = new Vector3f(up); perpL = 0.25f; }
+            case PISTOL -> {
+                if (g.supportKind == WeaponGeometry.Support.MAG) {
+                    // Tec-9 style: the support hand holds the magazine in front of the trigger guard
+                    pL = new Vector3f(g.support).add(0, -0.012f, 0);
+                    axL = new Vector3f(0, 1, 0);
+                } else {
+                    pL = new Vector3f(g.grip).add(new Vector3f(up).mul(-0.062f)).add(-0.022f, 0, -0.012f);
+                    axL = new Vector3f(up);
+                }
+                perpL = 0.25f;
+            }
             case DUAL -> { pL = new Vector3f(pR); axL = new Vector3f(up); perpL = perpR; }
             case C4 -> pL = new Vector3f(g.grip).add(0.0f, -0.012f, -0.1f);
             default -> {
@@ -530,6 +541,12 @@ public final class ViewModelRenderer {
             MeshRenderer.part(mesh, "mag", ps, buf, light, 0xFFFFFFFF, MeshRenderer.WEAPON_TEX);
             ps.popPose();
         }
+    }
+
+    /** held equipment (kevlar, helmet, defuse kit) is shown hand sized; everything else at its real size */
+    public static float itemScale(WeaponDef def, Mesh mesh) {
+        if (def.category != WeaponDef.Category.EQUIPMENT) return 1f;
+        return Math.min(1f, 0.13f / Math.max(0.01f, mesh.longestSide()));
     }
 
     /** forearm direction (elbow to hand), turned by `perp` towards lying across `axis`, the handle held in the fist */

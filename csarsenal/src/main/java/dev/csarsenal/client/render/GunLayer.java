@@ -38,6 +38,8 @@ public final class GunLayer extends RenderLayer<AbstractClientPlayer, PlayerMode
                              AbstractClientPlayer p, boolean main) {
         ps.pushPose();
         ps.mulPose(m);
+        float k = ViewModelRenderer.itemScale(def, gm);
+        if (k != 1) ps.scale(k, k, k);
         for (String part : gm.parts.keySet()) {
             if (part.equals("mag") && pose.magMode != 0) continue;
             if (part.equals("silencer") && !silencer) continue;
