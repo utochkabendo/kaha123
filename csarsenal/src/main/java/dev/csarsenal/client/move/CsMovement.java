@@ -134,7 +134,9 @@ public final class CsMovement implements CsMovementHook.Handler {
                 double cur = vx * dirx + vz * dirz;
                 double add = wishspeed - cur;
                 if (add > 0) {
-                    double acc = Math.min(SV_ACCELERATE * dt * wishspeed * frictionScale, add);
+                    // CS: the acceleration scale never drops below 250 u/s (kAccelerationScale), so walking,
+                    // crouching and slow weapons still get up to (their lower) speed quickly
+                    double acc = Math.min(SV_ACCELERATE * dt * Math.max(250.0, wishspeed) * frictionScale, add);
                     vx += acc * dirx;
                     vz += acc * dirz;
                 }

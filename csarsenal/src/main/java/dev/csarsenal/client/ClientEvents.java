@@ -76,8 +76,8 @@ public final class ClientEvents {
         AgentPose.newFrame();
         if (mc.player == null) return;
         boolean cs = CsMode.active(mc.player);
-        SubtickInput.walkDown = cs && Keys.rawDown(Keys.WALK);
-        SubtickInput.crouchDown = cs && Keys.rawDown(Keys.CROUCH);
+        SubtickInput.walkDown = cs && (Keys.rawDown(Keys.WALK) || dev.csarsenal.client.dev.AutoTest.walk);
+        SubtickInput.crouchDown = cs && (Keys.rawDown(Keys.CROUCH) || dev.csarsenal.client.dev.AutoTest.crouch);
         SubtickInput.sample(mc);
         ClientWeapon.INSTANCE.frame(mc, e.getPartialTick().getGameTimeDeltaPartialTick(true));
         if (dev.csarsenal.client.dev.AutoTest.enabled()) dev.csarsenal.client.dev.AutoTest.preFrame(mc);

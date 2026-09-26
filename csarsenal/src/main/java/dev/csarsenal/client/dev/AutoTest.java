@@ -35,6 +35,13 @@ public final class AutoTest {
     private static int index = -1, wait = 0, tick;
     private static boolean started;
     private static String lastVm = "";
+    public static boolean walk, crouch;
+
+    private static void logMove(Minecraft mc, String label) {
+        var m = dev.csarsenal.client.move.CsMovement.INSTANCE;
+        CsArsenal.LOG.info("AUTOTEST move {} speed={} u/s ground={} z={}", label, Math.round(m.horizontalSpeed()), m.onGround,
+                mc.player == null ? 0 : String.format("%.2f", mc.player.getZ()));
+    }
 
     private static void step(int delay, Consumer<Minecraft> a) {
         STEPS.add(new Step(delay, a));
@@ -271,6 +278,26 @@ public final class AutoTest {
                     CsArsenal.LOG.info("AUTOTEST money {}", mc.player == null ? -1 : dev.csarsenal.client.ClientData.money(mc.player));
                 });
                 step(5, mc -> cmd(mc, "kill @e[type=minecraft:" + mob + "]"));
+            } else if (s.startsWith("move:")) {
+                // move:<item>:<run|walk|crouch>  hold W for 36 ticks and log the CS speed, then release
+                String[] q = s.split(":");
+                String id = q[1], mode = q.length > 2 ? q[2] : "run";
+                lastVm = id;
+                step(5, mc -> { mc.options.setCameraType(CameraType.FIRST_PERSON); hold(mc, id); cmd(mc, "tp @a 0.5 100 5.5 180 0"); });
+                step(40, mc -> { look(mc, 180, 0); walk = mode.equals("walk"); crouch = mode.equals("crouch"); mc.options.keyUp.setDown(true); });
+                int[] at = {1, 2, 3, 5, 8, 12, 20, 30};
+                int prev = 0;
+                for (int t : at) {
+                    int d = t - prev;
+                    prev = t;
+                    step(d, mc -> logMove(mc, id + " " + mode + " t=" + t));
+                }
+                step(6, mc -> { mc.options.keyUp.setDown(false); logMove(mc, id + " " + mode + " release"); });
+                for (int t = 1; t <= 6; t++) {
+                    int tt = t;
+                    step(1, mc -> logMove(mc, id + " " + mode + " stop+" + tt));
+                }
+                step(10, mc -> { walk = crouch = false; logMove(mc, id + " " + mode + " end"); });
             } else if (s.startsWith("cmd:")) {
                 String c = s.substring(4);
                 step(5, mc -> cmd(mc, c));
