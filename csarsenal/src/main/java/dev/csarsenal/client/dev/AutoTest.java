@@ -155,6 +155,20 @@ public final class AutoTest {
                     w.throwStart = w.pinStart = -100;
                     w.reloading = false;
                 });
+            } else if (s.startsWith("spray:")) {
+                // spray:<item>:<yaw>  full magazine without mouse compensation, then a screenshot of the holes
+                String[] q = s.split(":");
+                String id = q[1];
+                float yaw = q.length > 2 ? Float.parseFloat(q[2]) : 0;
+                var d = dev.csarsenal.weapon.Weapons.byId(id);
+                int ticks = d == null ? 60 : (int) Math.ceil(d.magSize * d.cycleTime * 20) + 6;
+                lastVm = id;
+                step(5, mc -> { mc.options.setCameraType(CameraType.FIRST_PERSON); hold(mc, id); look(mc, yaw, 0); });
+                step(45, mc -> { look(mc, yaw, 0); ClientWeapon.INSTANCE.testTrigger(true); });
+                step(3, mc -> shot(mc, id + "_spray_mid"));
+                step(ticks, mc -> ClientWeapon.INSTANCE.testTrigger(false));
+                step(30, mc -> { look(mc, yaw, 0); });
+                step(5, mc -> shot(mc, id + "_spray"));
             } else if (s.startsWith("kseq:")) {
                 // kseq:<item>  frame sequences of slash, stab and inspect
                 String id = s.substring(5);
@@ -229,6 +243,50 @@ public final class AutoTest {
                 step(35, mc -> ClientWeapon.INSTANCE.testScope());
                 step(10, mc -> shot(mc, id + "_scope"));
                 step(5, mc -> ClientWeapon.INSTANCE.zoom = 0);
+            } else if (s.startsWith("nade:")) {
+                // nade:<type>:<ticks>  detonate a grenade ahead of the player, screenshot after <ticks>
+                String[] q = s.split(":");
+                var type = dev.csarsenal.weapon.GrenadeType.valueOf(q[1].toUpperCase());
+                int after = q.length > 2 ? Integer.parseInt(q[2]) : 60;
+                step(5, mc -> { mc.options.setCameraType(CameraType.FIRST_PERSON); hold(mc, "ak47"); look(mc, 0, 8); });
+                step(30, mc -> spawnNade(mc, type, type == dev.csarsenal.weapon.GrenadeType.FLASH ? 2.5 : 5));
+                step(after, mc -> shot(mc, "nade_" + q[1] + "_" + after));
+                if (type == dev.csarsenal.weapon.GrenadeType.FLASH) {
+                    step(20, mc -> shot(mc, "nade_flash_late"));
+                    step(40, mc -> shot(mc, "nade_flash_later"));
+                }
+                step(60, mc -> cmd(mc, "kill @e[type=!player]"));
+            } else if (s.startsWith("kill:")) {
+                // kill:<item>:<mob>  shoot a mob standing 6 blocks ahead (checks damage + the kill reward)
+                String[] q = s.split(":");
+                String id = q[1], mob = q[2];
+                lastVm = id;
+                step(5, mc -> { mc.options.setCameraType(CameraType.FIRST_PERSON); hold(mc, id); look(mc, 0, 0);
+                    cmd(mc, "summon minecraft:" + mob + " 0.5 100 6.5 {NoAI:1b,Rotation:[180f,0f],PersistenceRequired:1b}"); });
+                step(45, mc -> { look(mc, 0, mob.equals("zombie") ? -1.5f : 0); ClientWeapon.INSTANCE.testTrigger(true); });
+                step(4, mc -> shot(mc, "kill_" + id + "_" + mob + "_hit"));
+                step(20, mc -> ClientWeapon.INSTANCE.testTrigger(false));
+                step(20, mc -> {
+                    shot(mc, "kill_" + id + "_" + mob);
+                    CsArsenal.LOG.info("AUTOTEST money {}", mc.player == null ? -1 : dev.csarsenal.client.ClientData.money(mc.player));
+                });
+                step(5, mc -> cmd(mc, "kill @e[type=minecraft:" + mob + "]"));
+            } else if (s.startsWith("cmd:")) {
+                String c = s.substring(4);
+                step(5, mc -> cmd(mc, c));
+            } else if (s.startsWith("buy")) {
+                // buy[:name]  open the buy menu (stays open) and take a screenshot
+                String name = s.contains(":") ? s.substring(4) : "buy";
+                step(5, mc -> mc.setScreen(new dev.csarsenal.client.gui.BuyMenuScreen()));
+                step(20, mc -> shot(mc, name));
+            } else if (s.startsWith("press:")) {
+                // press:<digit>  a number key on the open screen, then a screenshot
+                int k = Integer.parseInt(s.substring(6));
+                step(2, mc -> { if (mc.screen != null) mc.screen.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_0 + k, 0, 0); });
+                step(12, mc -> shot(mc, "press_" + k + "_" + (tick)));
+            } else if (s.equals("close")) {
+                step(2, mc -> mc.setScreen(null));
+                step(10, mc -> shot(mc, "closed_" + tick));
             } else if (s.equals("smoke")) {
                 step(5, mc -> { mc.options.setCameraType(CameraType.FIRST_PERSON); look(mc, 0, 10); cmd(mc, "summon csarsenal:grenade 0 100.2 5"); });
                 step(5, mc -> spawnSmoke(mc));
@@ -298,6 +356,17 @@ public final class AutoTest {
                 return;
             }
         }
+    }
+
+    private static void spawnNade(Minecraft mc, dev.csarsenal.weapon.GrenadeType type, double dist) {
+        MinecraftServer s = mc.getSingleplayerServer();
+        if (s == null) return;
+        s.execute(() -> {
+            var level = s.overworld();
+            var g = new dev.csarsenal.entity.GrenadeEntity(dev.csarsenal.registry.ModEntities.GRENADE.get(), level);
+            g.setup(type, null, new net.minecraft.world.phys.Vec3(0.5, 101.2, dist), new net.minecraft.world.phys.Vec3(0, -0.1, 0.02));
+            level.addFreshEntity(g);
+        });
     }
 
     private static void spawnSmoke(Minecraft mc) {

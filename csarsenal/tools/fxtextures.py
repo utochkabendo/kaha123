@@ -83,28 +83,29 @@ def muzzle_side(w, h):
     return img
 
 def hole(n, kind, seed):
+    """Pixel art bullet hole (16x16, hard edged like Minecraft textures): dark core, torn rim, chips."""
     rng = np.random.default_rng(seed)
-    r, th = radial(n)
-    nz = fnoise(n, 1.6, seed)
+    base = {'concrete': (92, 88, 84), 'wood': (74, 50, 28), 'metal': (58, 58, 64), 'glass': (200, 210, 220), 'dirt': (52, 42, 32)}[kind]
+    rim = {'concrete': (150, 146, 140), 'wood': (170, 132, 86), 'metal': (150, 152, 160), 'glass': (230, 240, 250), 'dirt': (90, 76, 60)}[kind]
     img = np.zeros((n, n, 4))
-    base = {'concrete': (60, 58, 55), 'wood': (60, 40, 22), 'metal': (40, 40, 44), 'glass': (200, 210, 220), 'dirt': (45, 36, 28)}[kind]
+    c = (n - 1) / 2
+    yy, xx = np.mgrid[0:n, 0:n]
+    r = np.sqrt((xx - c) ** 2 + (yy - c) ** 2)
+    th = np.arctan2(yy - c, xx - c)
+    jag = 1 + 0.25 * np.sin(th * rng.integers(4, 7) + rng.uniform(0, 6)) + 0.15 * rng.normal(size=(n, n))
     if kind == 'glass':
         im = Image.new('RGBA', (n, n), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        for k in range(9):
-            a = rng.uniform(0, 2 * math.pi); L = rng.uniform(0.3, 0.5) * n
-            d.line([n / 2, n / 2, n / 2 + math.cos(a) * L, n / 2 + math.sin(a) * L], fill=(230, 240, 250, 200), width=1)
-        for rr in (0.18, 0.3):
-            d.ellipse([n / 2 - rr * n, n / 2 - rr * n, n / 2 + rr * n, n / 2 + rr * n], outline=(220, 230, 240, 120))
-        d.ellipse([n / 2 - 2, n / 2 - 2, n / 2 + 2, n / 2 + 2], fill=(20, 20, 20, 255))
+        for k in range(7):
+            a = rng.uniform(0, 2 * math.pi); L = rng.uniform(0.35, 0.5) * n
+            d.line([c, c, c + math.cos(a) * L, c + math.sin(a) * L], fill=(235, 245, 255, 210), width=1)
+        d.ellipse([c - 1.5, c - 1.5, c + 1.5, c + 1.5], fill=(25, 25, 28, 255))
         return np.array(im).astype(float)
-    core = np.clip(1 - r / 0.16, 0, 1)
-    ring = np.clip(1 - np.abs(r - 0.28) / 0.18, 0, 1) * (0.5 + 0.5 * nz)
-    chips = (np.cos(th * rng.integers(5, 9)) * 0.5 + 0.5) * np.clip(1 - r / 0.55, 0, 1) * nz
-    a = np.clip(core + ring * 0.8 + chips * 0.5, 0, 1)
-    img[..., 0] = base[0] * (1 - core) * 1.0 + 5 * core
-    img[..., 1] = base[1] * (1 - core) + 5 * core
-    img[..., 2] = base[2] * (1 - core) + 5 * core
-    img[..., 3] = a * 255
+    core = r * jag < 2.2
+    edge = (r * jag < 3.6) & ~core
+    chips = (r * jag < 6.2) & ~core & ~edge & (rng.random((n, n)) < 0.28)
+    img[edge] = (*base, 255)
+    img[chips] = (*rim, 200)
+    img[core] = (14, 12, 12, 255)
     return img
 
 def scope(n, lines=True):
@@ -166,7 +167,7 @@ def build(root):
     save(premul(muzzle_front(64)), f'{tex}/fx/muzzle_front.png')
     save(premul(muzzle_side(128, 48)), f'{tex}/fx/muzzle_side.png')
     for kind in ('concrete', 'wood', 'metal', 'glass', 'dirt'):
-        save(hole(32, kind, hash(kind) % 1000), f'{tex}/fx/hole_{kind}.png')
+        save(hole(16, kind, sum(map(ord, kind))), f'{tex}/fx/hole_{kind}.png')
     save(scope(1024), f'{tex}/gui/scope.png')
     save(scope_dot(512), f'{tex}/gui/scope_dot.png')
     return len(parts)

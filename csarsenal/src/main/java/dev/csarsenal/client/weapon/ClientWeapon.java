@@ -301,9 +301,10 @@ public final class ClientWeapon {
         switch (mode) {
             case AUTO -> {
                 if (attack) {
-                    if (nextFire < now - def.cycleTime) nextFire = now;
+                    // sub-tick: every shot happens at its own time, a slow frame fires the shots it spanned
+                    if (nextFire < now - 0.25) nextFire = now;
                     int guard = 0;
-                    while (now >= nextFire && ammo > 0 && guard++ < 4) {
+                    while (now >= nextFire && ammo > 0 && guard++ < 8) {
                         fire(mc, p, pt);
                         nextFire += def.cycleTime;
                     }

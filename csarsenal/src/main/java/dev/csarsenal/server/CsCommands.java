@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-/** /cs team t|ct|none, /cs armor &lt;0-100&gt; [helmet], /cs refill */
+/** /cs team t|ct|none, /cs armor &lt;0-100&gt; [helmet], /cs money &lt;amount&gt;, /cs refill */
 public final class CsCommands {
     public static void register(RegisterCommandsEvent e) {
         e.getDispatcher().register(Commands.literal("cs")
@@ -34,6 +34,11 @@ public final class CsCommands {
                                 .executes(c -> armor(c.getSource(), IntegerArgumentType.getInteger(c, "amount"), true))
                                 .then(Commands.argument("helmet", BoolArgumentType.bool())
                                         .executes(c -> armor(c.getSource(), IntegerArgumentType.getInteger(c, "amount"), BoolArgumentType.getBool(c, "helmet"))))))
+                .then(Commands.literal("money").requires(s -> s.hasPermission(2))
+                        .then(Commands.argument("amount", IntegerArgumentType.integer(0, 1000000))
+                                .executes(c -> money(java.util.List.of(c.getSource().getPlayerOrException()), IntegerArgumentType.getInteger(c, "amount")))
+                                .then(Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+                                        .executes(c -> money(net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"), IntegerArgumentType.getInteger(c, "amount"))))))
                 .then(Commands.literal("refill").requires(s -> s.hasPermission(2)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
@@ -45,6 +50,11 @@ public final class CsCommands {
                     }
                     return 1;
                 })));
+    }
+
+    private static int money(java.util.Collection<ServerPlayer> players, int amount) {
+        for (ServerPlayer p : players) CsPlayerData.set(p, CsPlayerData.get(p).withMoney(amount));
+        return players.size();
     }
 
     private static int armor(CommandSourceStack src, int amount, boolean helmet) throws com.mojang.brigadier.exceptions.CommandSyntaxException {

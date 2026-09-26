@@ -63,7 +63,7 @@ public final class ClientFx {
             case DIRT, SOFT -> "dirt";
             default -> "concrete";
         };
-        WorldFx.decal(pos, face, kind, w.material == Material.GLASS ? 0.09f : 0.045f + R.nextFloat() * 0.015f, w.pos);
+        WorldFx.decal(pos, face, kind, w.material == Material.GLASS ? 0.1f : 0.07f + R.nextFloat() * 0.015f, w.pos);
         if (w.state != null) {
             for (int i = 0; i < (entry ? 6 : 3); i++) {
                 Vec3 v = n.scale(0.05 + R.nextDouble() * 0.12).add(R.nextGaussian() * 0.05, R.nextDouble() * 0.06, R.nextGaussian() * 0.05);

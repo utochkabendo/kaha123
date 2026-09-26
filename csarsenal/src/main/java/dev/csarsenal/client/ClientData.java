@@ -33,6 +33,11 @@ public final class ClientData {
         return d != null && d.defuser();
     }
 
+    public static int money(Player p) {
+        CsDataPayload d = get(p);
+        return d == null ? 0 : d.money();
+    }
+
     public static int team(Player p) {
         CsDataPayload d = get(p);
         return d == null ? 0 : d.team();

@@ -55,7 +55,7 @@ public final class CsDamage {
                 float[] r = Ballistics.applyArmor(dmg, ap, d.armor(), true);
                 dmg = r[0];
                 int newArmor = Math.max(0, d.armor() - Math.round(r[1]));
-                CsPlayerData.set(vp, new CsPlayerData(newArmor, d.helmet(), d.defuser(), d.team()));
+                CsPlayerData.set(vp, new CsPlayerData(newArmor, d.helmet(), d.defuser(), d.team(), d.money()));
                 helmetHit = c.group == HitGroup.HEAD;
                 kevlarHit = !helmetHit;
             }

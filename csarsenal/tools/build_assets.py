@@ -119,6 +119,17 @@ LANG_EN = {
     'csarsenal.buy.grenades': 'Grenades',
     'csarsenal.buy.gear': 'Gear',
     'csarsenal.buy.disabled': 'The buy menu is disabled on this server',
+    'csarsenal.buy.no_money': 'Not enough money (need $%s more)',
+    'csarsenal.buy.have': 'You already have this',
+    'csarsenal.buy.free': 'FREE',
+    'csarsenal.buy.reward': 'Kill reward',
+    'csarsenal.buy.hint': 'Kill enemies to earn money',
+    'csarsenal.buy.keys': '[1-6] category   [1-9] buy   [B] close',
+    'csarsenal.buy.damage': 'Damage',
+    'csarsenal.buy.pen': 'Armor penetration',
+    'csarsenal.buy.rate': 'Fire rate',
+    'csarsenal.buy.mag': 'Magazine',
+    'csarsenal.buy.speed': 'Running speed',
     'csarsenal.tooltip.damage': 'Damage: %s',
     'csarsenal.tooltip.armor_pen': 'Armor penetration: %s%%',
     'csarsenal.tooltip.rpm': 'Fire rate: %s RPM',
@@ -172,6 +183,17 @@ LANG_RU = {
     'csarsenal.buy.grenades': 'Гранаты',
     'csarsenal.buy.gear': 'Снаряжение',
     'csarsenal.buy.disabled': 'Меню закупки отключено на этом сервере',
+    'csarsenal.buy.no_money': 'Недостаточно денег (не хватает $%s)',
+    'csarsenal.buy.have': 'У вас это уже есть',
+    'csarsenal.buy.free': 'БЕСПЛАТНО',
+    'csarsenal.buy.reward': 'Награда за убийство',
+    'csarsenal.buy.hint': 'Убивайте врагов, чтобы заработать деньги',
+    'csarsenal.buy.keys': '[1-6] категория   [1-9] купить   [B] закрыть',
+    'csarsenal.buy.damage': 'Урон',
+    'csarsenal.buy.pen': 'Бронепробитие',
+    'csarsenal.buy.rate': 'Скорострельность',
+    'csarsenal.buy.mag': 'Магазин',
+    'csarsenal.buy.speed': 'Скорость бега',
     'csarsenal.tooltip.damage': 'Урон: %s',
     'csarsenal.tooltip.armor_pen': 'Бронепробитие: %s%%',
     'csarsenal.tooltip.rpm': 'Скорострельность: %s выстр/мин',
@@ -212,7 +234,13 @@ def main():
         with open(f'{mdir}/{item_id}.json', 'w') as fp:
             json.dump({'parent': 'minecraft:builtin/entity', 'gui_light': 'side',
                        'textures': {'particle': 'minecraft:item/iron_ingot'}}, fp)
-    # lang
+    write_lang()
+    with open(os.path.join(ASSETS, 'meshes', 'index.json'), 'w') as fp:
+        json.dump([i[0] for i in ITEMS] + extra, fp)
+    print(f'done in {time.time() - t0:.1f}s')
+
+
+def write_lang():
     ldir = os.path.join(ASSETS, 'lang')
     os.makedirs(ldir, exist_ok=True)
     en_map = dict(LANG_EN)
@@ -223,10 +251,11 @@ def main():
     for name, m in (('en_us', en_map), ('ru_ru', ru_map)):
         with open(f'{ldir}/{name}.json', 'w', encoding='utf-8') as fp:
             json.dump(m, fp, indent=1, ensure_ascii=False, sort_keys=True)
-    with open(os.path.join(ASSETS, 'meshes', 'index.json'), 'w') as fp:
-        json.dump([i[0] for i in ITEMS] + extra, fp)
-    print(f'done in {time.time() - t0:.1f}s')
 
 
 if __name__ == '__main__':
-    main()
+    # python3 tools/build_assets.py [lang]   ("lang" only rewrites the language files)
+    if 'lang' in sys.argv[1:]:
+        write_lang()
+    else:
+        main()

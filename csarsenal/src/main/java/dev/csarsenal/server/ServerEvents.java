@@ -52,7 +52,36 @@ public final class ServerEvents {
 
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
-        if (e.getEntity() instanceof ServerPlayer sp) CsPlayerData.sync(sp);
+        if (!(e.getEntity() instanceof ServerPlayer sp)) return;
+        CsPlayerData d = CsPlayerData.get(sp);
+        if (d.money() < 0) sp.setData(ModAttachments.CS_DATA, d.withMoney(Config.startMoney()));
+        CsPlayerData.sync(sp);
+    }
+
+    /** CS kill rewards: the weapon's reward for killing a player (or, scaled, a hostile mob); -$300 for a teammate */
+    @SubscribeEvent
+    public static void onKill(net.neoforged.neoforge.event.entity.living.LivingDeathEvent e) {
+        if (!(e.getSource().getEntity() instanceof ServerPlayer killer) || e.getEntity() == killer) return;
+        if (!Config.economy()) return;
+        var victim = e.getEntity();
+        var src = e.getSource();
+        int reward;
+        if (src.is(dev.csarsenal.registry.ModDamageTypes.GRENADE) || src.is(dev.csarsenal.registry.ModDamageTypes.INFERNO)) reward = 300;
+        else if (src.is(dev.csarsenal.registry.ModDamageTypes.BOMB)) reward = 0;
+        else {
+            dev.csarsenal.weapon.WeaponDef d = CsItem.defOf(killer.getMainHandItem());
+            if (d == null) return;
+            reward = d.killReward;
+        }
+        if (victim instanceof ServerPlayer vp) {
+            int kt = CsPlayerData.get(killer).team(), vt = CsPlayerData.get(vp).team();
+            if (kt != 0 && kt == vt) reward = -300;
+        } else if (victim instanceof net.minecraft.world.entity.monster.Enemy) {
+            reward = (int) Math.round(reward * Config.mobRewardScale() / 50.0) * 50;
+        } else {
+            return;
+        }
+        if (reward != 0) CsPlayerData.addMoney(killer, reward);
     }
 
     @SubscribeEvent
@@ -68,9 +97,7 @@ public final class ServerEvents {
     @SubscribeEvent
     public static void onTrack(PlayerEvent.StartTracking e) {
         if (e.getTarget() instanceof ServerPlayer target && e.getEntity() instanceof ServerPlayer viewer) {
-            CsPlayerData d = CsPlayerData.get(target);
-            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(viewer,
-                    new dev.csarsenal.network.CsDataPayload(target.getId(), d.armor(), d.helmet(), d.defuser(), d.team()));
+            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(viewer, CsPlayerData.payload(target));
         }
     }
 

@@ -6,7 +6,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class Config {
     public enum MovementMode { HOLDING_CS_ITEM, ALWAYS, OFF }
 
-    public enum BuyMode { FREE, CREATIVE_ONLY, DISABLED }
+    public enum BuyMode { ECONOMY, FREE, CREATIVE_ONLY, DISABLED }
 
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.DoubleValue DAMAGE_SCALE;
@@ -19,6 +19,9 @@ public final class Config {
     public static final ModConfigSpec.BooleanValue C4_BREAKS_BLOCKS;
     public static final ModConfigSpec.IntValue BOMB_TIMER;
     public static final ModConfigSpec.DoubleValue HIT_TOLERANCE;
+    public static final ModConfigSpec.IntValue START_MONEY;
+    public static final ModConfigSpec.IntValue MAX_MONEY;
+    public static final ModConfigSpec.DoubleValue MOB_REWARD;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -27,7 +30,12 @@ public final class Config {
                 .defineInRange("damageScale", 0.2, 0.01, 10.0);
         MOVEMENT = b.comment("When the CS2 movement physics (speeds, acceleration, friction, air strafing, shift-walk, ctrl-crouch) is used.")
                 .defineEnum("movement", MovementMode.HOLDING_CS_ITEM);
-        BUY = b.comment("Buy menu (B): FREE for everybody, CREATIVE_ONLY or DISABLED").defineEnum("buyMenu", BuyMode.FREE);
+        BUY = b.comment("Buy menu (B): ECONOMY (CS money: start money, kill rewards; creative players buy for free), FREE for everybody, CREATIVE_ONLY or DISABLED")
+                .defineEnum("buyMode", BuyMode.ECONOMY);
+        START_MONEY = b.comment("Money of a player joining for the first time").defineInRange("startMoney", 800, 0, 1000000);
+        MAX_MONEY = b.comment("Money cap").defineInRange("maxMoney", 16000, 0, 1000000);
+        MOB_REWARD = b.comment("Kill reward for hostile mobs as a share of the CS kill reward of the weapon (players always give the full reward)")
+                .defineInRange("mobKillReward", 0.5, 0.0, 10.0);
         BREAK_GLASS = b.comment("Bullets shatter glass blocks and panes").define("bulletsBreakGlass", true);
         FRIENDLY_FIRE = b.comment("Damage players of the same CS team").define("friendlyFire", true);
         INFINITE_RESERVE = b.comment("Reserve ammo never runs out").define("infiniteReserve", false);
@@ -45,6 +53,26 @@ public final class Config {
 
     public static MovementMode movement() {
         return SPEC.isLoaded() ? MOVEMENT.get() : MovementMode.HOLDING_CS_ITEM;
+    }
+
+    public static BuyMode buyMode() {
+        return SPEC.isLoaded() ? BUY.get() : BuyMode.ECONOMY;
+    }
+
+    public static boolean economy() {
+        return buyMode() == BuyMode.ECONOMY;
+    }
+
+    public static int startMoney() {
+        return SPEC.isLoaded() ? START_MONEY.get() : 800;
+    }
+
+    public static int maxMoney() {
+        return SPEC.isLoaded() ? MAX_MONEY.get() : 16000;
+    }
+
+    public static double mobRewardScale() {
+        return SPEC.isLoaded() ? MOB_REWARD.get() : 0.5;
     }
 
     public static boolean get(ModConfigSpec.BooleanValue v, boolean def) {

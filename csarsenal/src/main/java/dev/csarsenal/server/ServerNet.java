@@ -297,7 +297,7 @@ public final class ServerNet {
 
     // ================================================================================================= buy menu
     public static void buy(ServerPlayer sp, Packets.Buy p) {
-        Config.BuyMode mode = Config.SPEC.isLoaded() ? Config.BUY.get() : Config.BuyMode.FREE;
+        Config.BuyMode mode = Config.buyMode();
         if (mode == Config.BuyMode.DISABLED || (mode == Config.BuyMode.CREATIVE_ONLY && !sp.isCreative())) {
             sp.displayClientMessage(Component.translatable("csarsenal.buy.disabled"), true);
             return;
@@ -305,12 +305,26 @@ public final class ServerNet {
         WeaponDef d = Weapons.byId(p.id());
         Item item = ModItems.get(p.id());
         if (d == null || item == null) return;
+        CsPlayerData data = CsPlayerData.get(sp);
+        int price = d.price;
+        if (item instanceof EquipmentItem eq && eq.kind == EquipmentItem.Kind.ASSAULTSUIT && data.armor() >= 100) price = 350;   // helmet only
+        boolean pay = mode == Config.BuyMode.ECONOMY && !sp.isCreative();
+        int money = Math.max(0, data.money());
+        if (pay && money < price) {
+            sp.displayClientMessage(Component.translatable("csarsenal.buy.no_money", price - money).withStyle(net.minecraft.ChatFormatting.RED), true);
+            sp.serverLevel().playSound(null, sp.getX(), sp.getY(), sp.getZ(), ModSounds.get("weapon.dryfire"), SoundSource.PLAYERS, 0.5f, 0.8f);
+            return;
+        }
         if (item instanceof EquipmentItem eq) {
-            EquipmentItem.apply(sp, eq.kind);
+            if (!EquipmentItem.apply(sp, eq.kind)) {
+                sp.displayClientMessage(Component.translatable("csarsenal.buy.have"), true);
+                return;
+            }
         } else {
             ItemStack s = item.getDefaultInstance();
             if (!sp.getInventory().add(s)) sp.drop(s, false);
         }
+        if (pay && price > 0) CsPlayerData.addMoney(sp, -price);
         sp.serverLevel().playSound(null, sp.getX(), sp.getY(), sp.getZ(), ModSounds.get("ui.buy"), SoundSource.PLAYERS, 0.7f, 1f);
     }
 

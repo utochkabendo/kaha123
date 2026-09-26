@@ -197,6 +197,7 @@ public final class CsHud {
             g.fill(W - f.width(name) - 22, y - 4, W - 6, H - 6, 0x70000000);
             g.drawString(f, name, W - 14 - f.width(name), y + 4, 0xFFE8E8E8, true);
         }
+        money(g, f, p);
         // C4 planting progress
         if (p.isUsingItem() && p.getUseItem().getItem() instanceof C4Item) {
             float prog = Mth.clamp((C4Item.PLANT_TICKS - p.getUseItemRemainingTicks()) / (float) C4Item.PLANT_TICKS, 0, 1);
@@ -207,6 +208,33 @@ public final class CsHud {
             g.drawString(f, s, W / 2 - f.width(s) / 2, by - 12, 0xFFFFFFFF, true);
         }
         killFeed(g, f, W);
+    }
+
+    private static int lastMoney = -1;
+    private static int moneyDelta;
+    private static long moneyDeltaTime;
+
+    /** CS money (top left) with the "+$300" of the last change */
+    private static void money(GuiGraphics g, Font f, LocalPlayer p) {
+        if (!dev.csarsenal.Config.economy() || p.isCreative()) return;
+        int m = ClientData.money(p);
+        long now = System.currentTimeMillis();
+        if (lastMoney >= 0 && m != lastMoney) {
+            moneyDelta = now - moneyDeltaTime < 1500 ? moneyDelta + (m - lastMoney) : m - lastMoney;
+            moneyDeltaTime = now;
+        }
+        lastMoney = m;
+        String s = "$" + m;
+        int w = f.width(s) * 2 + 12;
+        g.fill(6, 6, 6 + w, 28, 0x70000000);
+        big(g, f, s, 12, 10, 0xFF8FD35E);
+        long age = now - moneyDeltaTime;
+        if (moneyDelta != 0 && age < 3000) {
+            int a = (int) (255 * Math.min(1, (3000 - age) / 600.0));
+            String d = (moneyDelta > 0 ? "+$" : "-$") + Math.abs(moneyDelta);
+            int col = (moneyDelta > 0 ? 0x8FD35E : 0xE0524A) | (Math.max(8, a) << 24);
+            g.drawString(f, d, 12, 32, col, true);
+        }
     }
 
     private static void big(GuiGraphics g, Font f, String s, int x, int y, int col) {
