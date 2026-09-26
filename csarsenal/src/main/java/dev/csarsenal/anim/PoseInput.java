@@ -29,6 +29,8 @@ public final class PoseInput {
     public float deploy = 1;
     /** knife attack progress 0..1 or -1 */
     public float melee = -1;
+    /** heavy (stab) knife attack */
+    public boolean meleeHeavy;
     public boolean scoped;
 
     public PoseInput reset() {
@@ -39,6 +41,7 @@ public final class PoseInput {
         throwAnim = -1;
         deploy = 1;
         melee = -1;
+        meleeHeavy = false;
         scoped = false;
         return this;
     }

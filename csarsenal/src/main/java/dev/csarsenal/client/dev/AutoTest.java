@@ -298,6 +298,15 @@ public final class AutoTest {
                     step(1, mc -> logMove(mc, id + " " + mode + " stop+" + tt));
                 }
                 step(10, mc -> { walk = crouch = false; logMove(mc, id + " " + mode + " end"); });
+            } else if (s.equals("camside") || s.equals("camfront")) {
+                // look at our own player through an armor stand (right-front side or straight front)
+                String pos = s.equals("camside") ? "-1.5 99.8 1.3 {Invisible:1b,NoGravity:1b,Tags:[\"cam\"],Rotation:[-118f,14f]}"
+                        : "0.5 99.9 3.2 {Invisible:1b,NoGravity:1b,Tags:[\"cam\"],Rotation:[180f,10f]}";
+                step(5, mc -> { cmd(mc, "tp @a 0.5 100 0.5 0 0"); look(mc, 0, 0); cmd(mc, "summon minecraft:armor_stand " + pos); });
+                step(20, mc -> camTo(mc));
+                step(5, mc -> { });
+            } else if (s.equals("camself")) {
+                step(2, mc -> { mc.setCameraEntity(mc.player); cmd(mc, "kill @e[tag=cam]"); });
             } else if (s.startsWith("cmd:")) {
                 String c = s.substring(4);
                 step(5, mc -> cmd(mc, c));

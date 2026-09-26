@@ -135,11 +135,23 @@ public final class McPose {
                 }
             }
             case KNIFE -> {
-                Vector3f dir = new Vector3f(0.05f, 0.75f, -0.66f).normalize();
+                Vector3f idle = new Vector3f(0.05f, 0.75f, -0.66f).normalize();
+                Vector3f dir = new Vector3f(idle);
                 if (in.melee >= 0) {
                     float m = in.melee;
-                    float s = Mth.sin(m * Mth.PI);
-                    dir = aim.transform(new Vector3f(0.6f * (0.5f - m), 0.25f - 0.3f * s, -1f).normalize());
+                    Vector3f local;
+                    if (in.meleeHeavy) {
+                        // wind up (knife raised back), thrust forward, recover
+                        float wind = smooth(0f, 0.28f, m) * (1 - smooth(0.28f, 0.4f, m));
+                        float thrust = smooth(0.28f, 0.4f, m) * (1 - smooth(0.6f, 0.95f, m));
+                        local = new Vector3f(0.05f, 0.3f - 0.8f * wind - 0.15f * thrust, -0.75f + 0.75f * wind - 0.35f * thrust);
+                    } else {
+                        // wide slash from the right (-X) across to the left, the arm out in front at chest height
+                        float sweep = smooth(0.08f, 0.5f, m);
+                        float out = Mth.sin(Mth.clamp(m / 0.85f, 0f, 1f) * Mth.PI);
+                        local = new Vector3f(-0.9f + 1.7f * sweep, 0.15f, -0.85f).normalize().lerp(idle, 1 - out);
+                    }
+                    dir = aim.transform(local.normalize());
                 }
                 grip = new Vector3f(shoulderR).add(dir.mul(ARM_REACH));
                 extra.rotateX(-0.3f);

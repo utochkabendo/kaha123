@@ -138,6 +138,7 @@ public final class AgentPose implements Hitboxes.PlayerShapes {
                 in.deploy = (float) Mth.clamp((w.now - w.drawStart) / w.drawDuration, 0, 1);
                 in.throwAnim = w.now - w.throwStart < ClientWeapon.THROW_TIME ? (float) ((w.now - w.throwStart) / ClientWeapon.THROW_TIME) : -1;
                 in.melee = w.now - w.knifeStart < (w.knifeHeavy ? 1.0 : 0.4) ? (float) ((w.now - w.knifeStart) / (w.knifeHeavy ? 1.0 : 0.4)) : -1;
+                in.meleeHeavy = w.knifeHeavy;
                 in.scoped = w.isScoped();
             } else {
                 in.reload = t - s.reloadStart < s.reloadDur ? (float) ((t - s.reloadStart) / s.reloadDur) : -1;
@@ -146,6 +147,7 @@ public final class AgentPose implements Hitboxes.PlayerShapes {
                 in.throwAnim = t - s.throwStart < ClientWeapon.THROW_TIME ? (float) ((t - s.throwStart) / ClientWeapon.THROW_TIME) : -1;
                 double md = s.meleeHeavy ? 1.0 : 0.4;
                 in.melee = t - s.meleeStart < md ? (float) ((t - s.meleeStart) / md) : -1;
+                in.meleeHeavy = s.meleeHeavy;
             }
         }
         s.pose.compute(in, p.isCrouching(), Mth.clamp(yawRel, -85, 85), pitch);

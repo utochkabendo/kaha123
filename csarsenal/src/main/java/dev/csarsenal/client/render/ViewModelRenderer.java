@@ -73,7 +73,9 @@ public final class ViewModelRenderer {
     private static final Keyframes INSPECT_KARAMBIT = new Keyframes(k(0, 0, 0, 0, 0, 0, 0), k(0.14f, -0.03f, 0.025f, -0.02f, 10, 20, 20), k(0.28f, -0.035f, 0.03f, -0.02f, 12, 24, 24),
             k(0.64f, -0.035f, 0.03f, -0.02f, 12, 24, 24), k(0.76f, -0.02f, 0.02f, -0.01f, -6, -20, -20), k(0.9f, -0.02f, 0.02f, -0.01f, -8, -24, -24), k(1, 0, 0, 0, 0, 0, 0));
     private static final Keyframes PIN = new Keyframes(k(0, 0, 0, 0, 0, 0, 0), k(0.4f, -0.02f, 0.02f, 0.015f, 8, -10, -6), k(1, 0.015f, 0.05f, 0.07f, 26, 0, 6));
-    private static final Keyframes THROW = new Keyframes(k(0, 0.015f, 0.05f, 0.07f, 26, 0, 6), k(0.3f, -0.04f, 0.0f, -0.24f, -60, -6, -4), k(1, -0.04f, -0.3f, -0.18f, -80, 0, 0));
+    /** overhand throw: wind up high and back (leaves the view at the top right), swing through, follow down out of view */
+    private static final Keyframes THROW = new Keyframes(k(0, 0.015f, 0.05f, 0.07f, 26, 0, 6), k(0.18f, 0.05f, 0.13f, 0.08f, 44, -8, 14),
+            k(0.34f, -0.02f, 0.03f, -0.16f, -30, 4, 0), k(0.55f, -0.05f, -0.16f, -0.12f, -62, 6, -4), k(1, -0.06f, -0.42f, -0.06f, -80, 0, 0));
 
     // ------------------------------------------------------------------------------------------------ placement
     /** resting placement of a hold type: grip position (camera space), base angles, elbow hints of both forearms */
@@ -266,7 +268,7 @@ public final class ViewModelRenderer {
                 pinVisible = tp < ClientWeapon.PIN_TIME * 0.6;
             } else if (tt < ClientWeapon.THROW_TIME) {
                 add(a, THROW, (float) (tt / ClientWeapon.THROW_TIME), 1);
-                grenadeVisible = tt / ClientWeapon.THROW_TIME < 0.3;
+                grenadeVisible = tt / ClientWeapon.THROW_TIME < 0.36;
                 pinVisible = false;
             } else if (tt < ClientWeapon.THROW_TIME + 0.3) {
                 return;
